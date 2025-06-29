@@ -1,0 +1,33 @@
+pt-BR:
+  activerecord:
+    models:
+      usuario: "Usuário"
+    attributes:
+      usuario:
+        email: "Email"
+        nome: "Nome completo"
+        cpf: "CPF"
+        telefone: "Telefone"
+        password: "Senha"
+    errors:
+      models:
+        usuario:
+          attributes:
+            email:
+              taken: "já está em uso"
+              blank: "não pode ficar em branco"
+            nome:
+              blank: "não pode ficar em branco"
+              too_short: "é muito curto (mínimo: %{count} caracteres)"
+              too_long: "é muito longo (máximo: %{count} caracteres)"
+            cpf:
+              invalid: "não é válido"
+              blank: "não pode ficar em branco"
+              taken: "já está em uso"
+            telefone:
+              too_short: "está incompleto"
+              too_long: "possui caracteres demais"
+              blank: "não pode ficar em branco"
+            password:
+              blank: "não pode ficar em branco"
+              too_short: "é muito curta (mínimo: %{count} caracteres)"
