@@ -2,15 +2,17 @@ source "https://rubygems.org"
 
 gem "rails", "~> 8.0.2"
 gem "pg", "~> 1.5.9"
-gem "puma", ">= 5.0"
+gem "puma", ">= 6.6.0"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
-gem "solid_cache"
-gem "solid_queue"
-gem "solid_cable"
+gem "solid_cache", "~> 1.0.7"
+gem "solid_queue", "~> 1.1.5"
+gem "solid_cable", "~> 3.0.11"
 gem "bootsnap", require: false
 gem "kamal", require: false
 gem "thruster", require: false
-gem "rack-cors"
+gem "rack-cors", "~> 3.0.0"
+gem "bcrypt", "~> 3.1.20"
+gem "jwt", "~> 3.1.2"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
