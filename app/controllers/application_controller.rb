@@ -25,7 +25,7 @@ class ApplicationController < ActionController::API
   def render_400(exception)
     render json: {
       erro: "Parâmetro ausente ou inválido",
-      detalhe: exception.message,
+      mensagem: exception.message,
       tipo: exception.class.to_s
     }, status: :bad_request
   end
@@ -33,7 +33,7 @@ class ApplicationController < ActionController::API
   def render_401(exception)
     render json: {
       erro: "Não autorizado",
-      detalhe: exception.message,
+      mensagem: exception.message,
       tipo: exception.class.to_s
     }, status: :unauthorized
   end
@@ -42,7 +42,7 @@ class ApplicationController < ActionController::API
     model = exception.message[/Couldn't find (\w+)/, 1] || "Recurso"
     render json: {
       erro: "#{model} não encontrado",
-      detalhe: [exception.message],
+      mensagem: exception.message,
       tipo: exception.class.to_s
     }, status: :not_found
   end
@@ -52,7 +52,7 @@ class ApplicationController < ActionController::API
     render json: {
       erro: "#{model_name} inválido",
       modelo: model_name,
-      erros: exception.record.errors.full_messages,
+      mensagens: exception.record.errors.full_messages,
       tipo: exception.class.to_s
     }, status: :unprocessable_entity
   end
@@ -63,7 +63,7 @@ class ApplicationController < ActionController::API
 
     render json: {
       erro: "Erro interno no servidor",
-      detalhe: exception.message,
+      mensagem: exception.message,
       tipo: exception.class.to_s
     }, status: :internal_server_error
   end
