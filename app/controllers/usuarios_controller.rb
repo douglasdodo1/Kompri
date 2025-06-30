@@ -14,12 +14,12 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    @usuario = Usuario.create!(create_params)
-    render json: @usuario
+    @usuario = Usuario.create!(user_params)
+    render json: @usuarios, status: :created, location: @usuario
   end
 
   def update
-    @usuario = Usuario.update!(update_params)
+    @usuario = Usuario.update!(user_params)
     render json: @usuario
   end
 
@@ -29,15 +29,11 @@ class UsuariosController < ApplicationController
   end
 
   private
-    def set_usuario
-      @usuario = Usuario.find_by!(cpf: params.expect(:cpf))
-    end
+  def set_usuario
+    @usuario = Usuario.find_by!(cpf: params.expect(:cpf))
+  end
 
-    def create_params
-      params.expect(usuario: [ :cpf, :nome, :email, :password, :telefone ])
-    end
-
-    def update_params
-      params.require(:usuario).permit(:cpf, :nome, :email, :password, :telefone)
-    end
+  def user_params
+    params.expect(usuario: [ :cpf, :nome, :email, :password, :telefone ])
+  end
 end
