@@ -5,6 +5,8 @@ class Usuario < ApplicationRecord
   validates :nome, presence: true, length: { minimum: 3, maximum: 50 }
   validates :email, presence: true, uniqueness: true
   validates :telefone, presence: true, length: { minimum: 11, maximum: 11 }
+
+  has_many :compras
   def as_json(options = {})
     super(options.merge(except: [:cpf,:password_digest, :created_at, :updated_at]))
   end
