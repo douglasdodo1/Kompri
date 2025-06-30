@@ -6,7 +6,6 @@ class ProdutosController < ApplicationController
   
   def index
     @produtos = Produto.all
-
     render json: @produtos
   end
 
@@ -20,15 +19,13 @@ class ProdutosController < ApplicationController
   end
 
   def update
-    if @produto.update(produto_params)
-      render json: @produto
-    else
-      render json: @produto.errors, status: :unprocessable_entity
-    end
+    @produto = Produto.update!(produto_params)
+    render json: @produto
   end
 
   def destroy
     @produto.destroy!
+    head :no_content
   end
 
   private

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :compras
+  resources :instituicoes
   resources :produtos
   resources :usuarios, param: :cpf
   post "/login", to: "auth#login"
