@@ -2,6 +2,7 @@ pt-BR:
   activerecord:
     models:
       usuario: "Usuário"
+      produto: "Produto"
     attributes:
       usuario:
         email: "Email"
@@ -9,6 +10,10 @@ pt-BR:
         cpf: "CPF"
         telefone: "Telefone"
         password: "Senha"
+      produto:
+        nome: "Nome"
+        marca: "Marca"
+        categoria: "Categoria"
     errors:
       models:
         usuario:
@@ -31,3 +36,16 @@ pt-BR:
             password:
               blank: "não pode ficar em branco"
               too_short: "é muito curta (mínimo: %{count} caracteres)"
+        produto:
+          attributes:
+            nome:
+              blank: "não pode ficar em branco"
+              too_short: "é muito curto (mínimo: %{count} caracteres)"
+              too_long: "é muito longo (máximo: %{count} caracteres)"
+            marca:
+              blank: "não pode ficar em branco"
+              too_short: "é muito curta (mínimo: %{count} caracteres)"
+              too_long: "é muito longa (máximo: %{count} caracteres)"
+            categoria:
+              too_short: "é muito curta (mínimo: %{count} caracteres)"
+              too_long: "é muito longa (máximo: %{count} caracteres)"
