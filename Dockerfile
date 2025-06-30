@@ -1,4 +1,4 @@
-FROM ruby:3.4.2-slim AS builder
+FROM ruby:3.4.4-slim AS builder
 
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
