@@ -3,6 +3,7 @@ pt-BR:
     models:
       usuario: "Usuário"
       produto: "Produto"
+      instituicao: "Instituição"
     attributes:
       usuario:
         email: "Email"
@@ -14,6 +15,8 @@ pt-BR:
         nome: "Nome"
         marca: "Marca"
         categoria: "Categoria"
+      instituicao:
+        nome: "Nome"
     errors:
       models:
         usuario:
@@ -49,3 +52,8 @@ pt-BR:
             categoria:
               too_short: "é muito curta (mínimo: %{count} caracteres)"
               too_long: "é muito longa (máximo: %{count} caracteres)"
+        instituicao:
+          attributes:
+            nome:
+              blank: "não pode ficar em branco"
+              too_long: "é muito longo (máximo: %{count} caracteres)"
