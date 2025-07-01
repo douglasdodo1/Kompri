@@ -4,5 +4,4 @@ class Item < ApplicationRecord
 
   validates :quantidade, presence: true, numericality: { greater_than: 0 }
   validates :valor, presence: true, numericality: { greater_than: 0 }
-  
 end

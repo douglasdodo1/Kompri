@@ -4,7 +4,7 @@ class Compra < ApplicationRecord
 
   validates :usuario_cpf, presence: true
   validates :status, presence: true, inclusion: { in: %w[pendente concluida cancelada] }
-  validates :valor_total, presence: true, numericality: { greater_than: 0, message: :not_a_number }
+  validates :valor_total, presence: true, numericality: { greater_than: 0 }
   validates :valor_estimado, presence: true, numericality: { greater_than: 0 }
   validates :qtd_itens, presence: true, numericality: { greater_than: 0 }
 end

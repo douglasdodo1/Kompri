@@ -1,16 +1,17 @@
 class InstituicoesController < ApplicationController
-  before_action :set_instituicao, only: %i[ show update destroy ]
+  before_action :authenticate_request!
+  before_action :set_instituicao, only: %i[ show index update destroy ]
   rescue_from ActiveRecord::RecordInvalid, with: :render_422
   rescue_from ActionController::ParameterMissing, with: :render_400
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from StandardError,                with: :render_500
   def index
     @instituicoes = Instituicao.all
-    render json: @instituicoes
+    render json: @instituicoes, status: :ok
   end
 
   def show
-    render json: @instituicao
+    render json: @instituicao, status: :ok, location: @instituicao
   end
 
   def create
@@ -20,7 +21,7 @@ class InstituicoesController < ApplicationController
 
   def update
     @instituicao.update(instituicao_params)
-    render json: @instituicao
+    render json: @instituicao, status: :ok, location: @instituicao
   end
 
   def destroy

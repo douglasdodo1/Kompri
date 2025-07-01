@@ -1,26 +1,27 @@
 class ProdutosController < ApplicationController
-  before_action :set_produto, only: %i[ show update destroy ]
+  before_action :authenticate_request!
+  before_action :set_produto, only: %i[ show index update destroy ]
   rescue_from ActiveRecord::RecordInvalid, with: :render_422
   rescue_from ActionController::ParameterMissing, with: :render_400
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from StandardError,                with: :render_500
   def index
     @produtos = Produto.all
-    render json: @produtos
+    render json: @produtos, status: :ok
   end
 
   def show
-    render json: @produto
+    render json: @produto, status: :ok, location: @produto
   end
 
   def create
     @produto = Produto.create!(produto_params)
-    render json: @produto
+    render json: @produto, status: :created, location: @produto
   end
 
   def update
     @produto.update!(produto_params)
-    render json: @produto
+    render json: @produto, status: :ok, location: @produto
   end
 
   def destroy
