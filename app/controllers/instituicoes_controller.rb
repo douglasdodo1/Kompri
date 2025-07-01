@@ -3,7 +3,7 @@ class InstituicoesController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_422
   rescue_from ActionController::ParameterMissing, with: :render_400
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
-
+  rescue_from StandardError,                with: :render_500
   def index
     @instituicoes = Instituicao.all
     render json: @instituicoes
@@ -19,7 +19,7 @@ class InstituicoesController < ApplicationController
   end
 
   def update
-    @instituicao = Instituicao.update(instituicao_params)
+    @instituicao.update(instituicao_params)
     render json: @instituicao
   end
 

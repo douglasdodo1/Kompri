@@ -3,7 +3,7 @@ class ProdutosController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_422
   rescue_from ActionController::ParameterMissing, with: :render_400
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  
+  rescue_from StandardError,                with: :render_500
   def index
     @produtos = Produto.all
     render json: @produtos
@@ -19,7 +19,7 @@ class ProdutosController < ApplicationController
   end
 
   def update
-    @produto = Produto.update!(produto_params)
+    @produto.update!(produto_params)
     render json: @produto
   end
 

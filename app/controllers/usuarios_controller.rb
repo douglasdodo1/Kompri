@@ -3,7 +3,7 @@ class UsuariosController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_422
   rescue_from ActionController::ParameterMissing, with: :render_400
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
-
+  rescue_from StandardError,                with: :render_500
   def index
     @usuarios = Usuario.all
     render json: @usuarios
@@ -15,11 +15,11 @@ class UsuariosController < ApplicationController
 
   def create
     @usuario = Usuario.create!(user_params)
-    render json: @usuarios, status: :created, location: @usuario
+    render json: @usuario, status: :created, location: @usuario
   end
 
   def update
-    @usuario = Usuario.update!(user_params)
+    @usuario.update!(user_params)
     render json: @usuario
   end
 
