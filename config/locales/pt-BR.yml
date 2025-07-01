@@ -34,6 +34,7 @@ pt-BR:
         comprado: "Comprado"
     errors:
       messages:
+        record_invalid: "A validação falhou: %{errors}"
         not_a_number: "deve ser um número"
       models:
         usuario:

@@ -1,12 +1,12 @@
 class ApplicationController < ActionController::API
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  rescue_from ActiveRecord::RecordInvalid,  with: :render_422
-  rescue_from JWT::ExpiredSignature,        with: :render_401
-  rescue_from JWT::DecodeError,             with: :render_401
-  rescue_from Auth::UnauthorizedError,       with: :render_401
-  rescue_from Auth::InvalidCredentialsError, with: :render_401
-  rescue_from ActionController::ParameterMissing, with: :render_400
-  rescue_from StandardError,                with: :render_500
+  rescue_from ActiveRecord::RecordNotFound,             with: :render_404
+  rescue_from ActiveRecord::RecordInvalid,              with: :render_422
+  rescue_from Auth::MissingTokenError,                  with: :render_401
+  rescue_from JWT::ExpiredSignature,                    with: :render_401
+  rescue_from Auth::UnauthorizedError,                  with: :render_401
+  rescue_from Auth::InvalidCredentialsError,            with: :render_401
+  rescue_from ActionController::ParameterMissing,       with: :render_400
+  rescue_from StandardError,                            with: :render_500
 
   private
 
@@ -14,12 +14,12 @@ class ApplicationController < ActionController::API
     header = request.headers["Authorization"]
     token = header.split(" ").last if header
 
-    raise JWT::DecodeError, "Token não fornecido" unless token
+    raise Auth::MissingTokenError, "Token não fornecido" unless token
 
     decoded = JWT.decode(token, Rails.application.secret_key_base)[0]
     raise JWT::ExpiredSignature if decoded["exp"] < Time.now.to_i
 
-    @current_user = User.find_by(email: decoded["email"])
+    @current_user = Usuario.find_by(email: decoded["email"])
   end
 
   def render_400(exception)
