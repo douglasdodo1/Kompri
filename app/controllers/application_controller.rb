@@ -8,7 +8,6 @@ class ApplicationController < ActionController::API
   rescue_from ActionController::ParameterMissing,       with: :render_400
   rescue_from StandardError,                            with: :render_500
 
-  private
 
   def authenticate_request!
     header = request.headers["Authorization"]
@@ -21,6 +20,9 @@ class ApplicationController < ActionController::API
 
     @current_user = Usuario.find_by(email: decoded["email"])
   end
+
+  private
+
 
   def render_400(exception)
     render json: {
@@ -48,15 +50,15 @@ class ApplicationController < ActionController::API
   end
 
   def render_422(exception)
-    model_name = exception.record.model_name.human
+    model_name = exception.record&.model_name&.human || "Recurso"
     render json: {
       erro: "#{model_name} inválido",
       modelo: model_name,
-      mensagens: exception.record.errors.full_messages,
+      mensagens: exception.record&.errors&.full_messages || [exception.message],
       tipo: exception.class.to_s
     }, status: :unprocessable_entity
   end
-
+  
   def render_500(exception)
     logger.error exception.message
     logger.error exception.backtrace.join("\n")

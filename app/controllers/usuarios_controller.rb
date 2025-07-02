@@ -15,13 +15,20 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    @usuario = Usuario.create!(user_params)
-    render json: @usuario, status: :created, location: @usuario
+    @usuario = Usuario.new(user_params)
+    if @usuario.save
+      render json: @usuario, status: :created, location: usuario
+    else
+      raise ActiveRecord::RecordInvalid.new(@usuario)
+    end
   end
 
   def update
-    @usuario.update!(user_params)
-    render json: @usuario, status: :ok, location: @usuario
+    if @usuario.update(user_params)
+      render json: @usuario, status: :ok, location: @usuario
+    else
+      raise ActiveRecord::RecordInvalid.new(@usuario)
+    end
   end
 
   def destroy

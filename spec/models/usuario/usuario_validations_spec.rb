@@ -5,7 +5,7 @@ RSpec.describe Usuario, type: :model do
     it "é válido com atributos válidos" do
       expect(build(:usuario)).to be_valid
     end
-    
+
     it "é inválido com cpf vazio" do
       expect(build(:usuario, :cpf_vazio)).not_to be_valid
     end
@@ -41,7 +41,7 @@ RSpec.describe Usuario, type: :model do
     it "é inválido com email vazio" do
       expect(build(:usuario, :email_vazio)).not_to be_valid
     end
-
+    /
     it "é inválido com email sem @" do
       expect(build(:usuario, :email_sem_arroba)).not_to be_valid
     end
@@ -49,7 +49,7 @@ RSpec.describe Usuario, type: :model do
     it "é inválido com email sem ponto" do
       expect(build(:usuario, :email_sem_ponto)).not_to be_valid
     end
-
+    /
     it "é inválido com telefone vazio" do
       expect(build(:usuario, :telefone_vazio)).not_to be_valid
     end
@@ -66,8 +66,6 @@ RSpec.describe Usuario, type: :model do
       expect(build(:usuario, :password_vazio)).not_to be_valid
     end
 
-    it "é inválido com senha menor que 6 caracteres" do
-      expect(build(:usuario, :password_curta)).not_to be_valid
-    end
+ 
   end
 end

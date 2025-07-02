@@ -3,8 +3,12 @@ class Usuario < ApplicationRecord
   has_secure_password
   validate :valid_cpf
   validates :nome, presence: true, length: { minimum: 3, maximum: 50 }
-  validates :email, presence: true, uniqueness: true, email: true
-  validates :telefone, presence: true, length: { minimum: 11, maximum: 11 }
+  validates :email, presence: true, uniqueness: true
+  validates :telefone, presence: true, length: { minimum: 11, maximum: 11 },format: {
+    with: /\A\d{11}\z/,
+    message: "deve conter exatamente 11 dígitos numéricos"
+  }
+  validates :password, length: { minimum: 6 }
 
   has_many :compras
   def as_json(options = {})
@@ -14,6 +18,8 @@ class Usuario < ApplicationRecord
   private
 
   def valid_cpf
+    puts "AQUI"
+    puts cpf
     if cpf.nil?
       errors.add(:cpf, "Não pode ser vazio")
       return

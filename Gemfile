@@ -22,6 +22,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.5'
   gem 'faker', '~> 3.5.2'
   gem 'cpf_faker', '~> 1.3'
+  gem 'shoulda-matchers', '~> 6.5'
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
 end
