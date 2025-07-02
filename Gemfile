@@ -17,8 +17,10 @@ gem "jwt", "~> 3.1.2"
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "rspec", "~> 3.13"
-
+  gem "rspec-rails", "~> 8.0.1"
+  gem 'factory_bot', '~> 6.5'
+  gem 'factory_bot_rails', '~> 6.5'
+  gem 'faker', '~> 3.5.2'
   gem "brakeman", require: false
-
   gem "rubocop-rails-omakase", require: false
 end
