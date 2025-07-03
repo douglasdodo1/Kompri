@@ -1,10 +1,7 @@
 class UsuariosController < ApplicationController
   before_action :authenticate_request!, only: %i[show index update destroy]
   before_action :set_usuario, only: %i[ show update destroy ]
-  rescue_from ActiveRecord::RecordInvalid, with: :render_422
-  rescue_from ActionController::ParameterMissing, with: :render_400
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  rescue_from StandardError,                with: :render_500
+
   def index
     @usuarios = Usuario.all
     render json: @usuarios, status: :ok
@@ -16,19 +13,14 @@ class UsuariosController < ApplicationController
 
   def create
     @usuario = Usuario.new(user_params)
-    if @usuario.save
-      render json: @usuario, status: :created, location: usuario
-    else
-      raise ActiveRecord::RecordInvalid.new(@usuario)
-    end
+    @usuario.save! 
+    render json: @usuario, status: :created
   end
 
+
   def update
-    if @usuario.update(user_params)
-      render json: @usuario, status: :ok, location: @usuario
-    else
-      raise ActiveRecord::RecordInvalid.new(@usuario)
-    end
+    @usuario = usuario.update!(user_params)
+    render json: @usuario, status: :ok, location: @usuario
   end
 
   def destroy

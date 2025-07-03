@@ -18,7 +18,6 @@ class Usuario < ApplicationRecord
   private
 
   def valid_cpf
-    puts "AQUI"
     puts cpf
     if cpf.nil?
       errors.add(:cpf, "Não pode ser vazio")

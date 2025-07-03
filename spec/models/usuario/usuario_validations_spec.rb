@@ -65,7 +65,5 @@ RSpec.describe Usuario, type: :model do
     it "é inválido com senha vazia" do
       expect(build(:usuario, :password_vazio)).not_to be_valid
     end
-
- 
   end
 end

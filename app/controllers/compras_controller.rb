@@ -1,10 +1,6 @@
 class ComprasController < ApplicationController
   before_action :authenticate_request!
   before_action :set_compra, only: %i[ show index update destroy ]
-  rescue_from ActiveRecord::RecordInvalid, with: :render_422
-  rescue_from ActionController::ParameterMissing, with: :render_400
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
-  rescue_from StandardError,                with: :render_500
   def index
     @compras = Compra.all
     render json: @compras.to_json(

@@ -1,6 +1,5 @@
 class AuthController < ApplicationController
-  rescue_from Auth::InvalidCredentialsError, with: :render_401
-  rescue_from StandardError,                with: :render_500
+
   def login
     usuario = Usuario.find_by(email: authenticate_params[:email])
     raise Auth::InvalidCredentialsError, "Credenciais invalidas" unless usuario
