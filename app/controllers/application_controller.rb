@@ -1,12 +1,13 @@
 class ApplicationController < ActionController::API
-  rescue_from ActiveRecord::RecordNotFound,             with: :render_404
+  rescue_from StandardError,                            with: :render_500
+  rescue_from ActiveModel::ValidationError,             with: :render_422
   rescue_from ActiveRecord::RecordInvalid,              with: :render_422
+  rescue_from ActiveRecord::RecordNotFound,             with: :render_404
   rescue_from Auth::MissingTokenError,                  with: :render_401
   rescue_from JWT::ExpiredSignature,                    with: :render_401
   rescue_from Auth::UnauthorizedError,                  with: :render_401
   rescue_from Auth::InvalidCredentialsError,            with: :render_401
   rescue_from ActionController::ParameterMissing,       with: :render_400
-  rescue_from StandardError,                            with: :render_500
 
 
   def authenticate_request!
