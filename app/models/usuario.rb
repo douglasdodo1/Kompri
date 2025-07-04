@@ -8,9 +8,10 @@ class Usuario < ApplicationRecord
     with: /\A\d{11}\z/,
     message: "deve conter exatamente 11 dígitos numéricos"
   }
-  validates :password, length: { minimum: 6 }
-
+  validates :password, presence: true, length: { minimum: 6 }, on: :create
+  validates :password, allow_nil: true, length: { minimum: 6 }, on: :update
   has_many :compras
+
   def as_json(options = {})
     super(options.merge(except: [:cpf,:password_digest, :created_at, :updated_at]))
   end
@@ -18,7 +19,6 @@ class Usuario < ApplicationRecord
   private
 
   def valid_cpf
-    puts cpf
     if cpf.nil?
       errors.add(:cpf, "Não pode ser vazio")
       return
