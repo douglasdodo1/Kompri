@@ -22,10 +22,6 @@ FactoryBot.define do
     cpf { '00000000' }
   end
 
-  trait :cpf_numeros_invalidos do
-    cpf { '0000000000' }
-  end
-
   trait :cpf_numeros_iguais do
     cpf { '00000000000' }
   end
@@ -77,4 +73,21 @@ FactoryBot.define do
     password { 'AAA' }
   end
 
+
+  #atualização de dados válidos
+  trait :nome_novo_valido do
+    nome { 'Nome Novo' }
+  end
+
+  trait :email_novo_valido do
+    email { 'emailnovo@com' }
+  end
+
+  trait :telefone_novo_valido do
+    telefone { '00000000000' }
+  end
+
+  trait :password_novo_valido do
+    password { 'passwordnovo' }
+  end
 end
