@@ -12,15 +12,21 @@ class UsuariosController < ApplicationController
   end
 
   def create
-    @usuario = Usuario.new(user_params)
-    @usuario.save! 
-    render json: @usuario, status: :created
+    @usuario = Usuario.create!(usuario_params)
+    render json: @usuario, status: :created, location: @usuario
   end
 
 
   def update
-    @usuario = usuario.update!(user_params)
-    render json: @usuario, status: :ok, location: @usuario
+    @usuario = Usuario.find_by!(cpf: params[:cpf])
+    @usuario.update!(usuario_params)
+    keys_enviadas = usuario_params.keys.map(&:to_s)
+    chaves_alteradas = @usuario.previous_changes.keys
+    .map(&:to_s)
+    .reject { |k| k == "updated_at" }
+    resultado = @usuario.as_json(only: keys_enviadas)
+    resultado.merge!("password" => "Alterado com sucesso") if chaves_alteradas.include?("password_digest")
+    render json: resultado, status: :ok, location: @usuario
   end
 
   def destroy
@@ -33,7 +39,7 @@ class UsuariosController < ApplicationController
     @usuario = Usuario.find_by!(cpf: params.expect(:cpf))
   end
 
-  def user_params
+  def usuario_params
     params.expect(usuario: [ :cpf, :nome, :email, :password, :telefone ])
   end
 end
