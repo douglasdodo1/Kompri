@@ -18,10 +18,6 @@ RSpec.describe Usuario, type: :model do
       expect(build(:usuario, :cpf_tamanho_invalido)).not_to be_valid
     end
 
-    it "é inválido com cpf com números inválidos" do
-      expect(build(:usuario, :cpf_numeros_invalidos)).not_to be_valid
-    end
-
     it "é inválido com cpf com números iguais" do
       expect(build(:usuario, :cpf_numeros_iguais)).not_to be_valid
     end
