@@ -5,7 +5,7 @@ gem "pg", "~> 1.5.9"
 gem "puma", ">= 6.6.0"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "solid_cache", "~> 1.0.7"
-gem "solid_queue", "~> 1.1.5"
+gem "solid_queue", "~> 1.2.0"
 gem "solid_cable", "~> 3.0.11"
 gem "bootsnap", require: false
 gem "kamal", require: false
