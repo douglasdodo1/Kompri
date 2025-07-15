@@ -7,5 +7,17 @@ RSpec.describe Instituicao, type: :model do
       column = columns["nome"]
       expect(column.type).to eq(:string)
     end
+
+    it "possui a coluna created_at como datetime e não nula" do
+      column = columns["created_at"]
+      expect(column.type).to eq(:datetime)
+      expect(column.null).to be false
+    end
+
+    it "possui a coluna updated_at como datetime e não nula" do
+      column = columns["updated_at"]
+      expect(column.type).to eq(:datetime)
+      expect(column.null).to be false
+    end
   end
 end
