@@ -65,7 +65,6 @@ RSpec.describe "requisições de instituiçãos", type: :request do
     let!(:instituicoes) { create_list(:instituicao, 3) }
     it "retorna todas as instituição com sucesso" do
       get "/instituicoes"
-      puts response.body
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
 
