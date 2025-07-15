@@ -1,15 +1,11 @@
 FactoryBot.define do
   factory :compra do
     association(:usuario)
+    association(:instituicao)
     status { "pendente" }
-    instituicao { association(:instituicao) }
     valor_total { 100.00 }
     valor_estimado { 80.00 }
     qtd_itens { 2 }
-
-    after(:build) do |compra|
-      compra.usuario_cpf ||= compra.usuario&.cpf
-    end
 
     trait :usuario_cpf_vazio do
       usuario_cpf { '' }

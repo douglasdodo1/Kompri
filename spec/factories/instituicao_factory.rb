@@ -14,6 +14,4 @@ FactoryBot.define do
       nome { 'Nome Novo' }
     end
   end
-
- 
 end
