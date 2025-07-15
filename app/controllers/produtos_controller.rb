@@ -1,6 +1,6 @@
 class ProdutosController < ApplicationController
   before_action :authenticate_request!
-  before_action :set_produto, only: %i[ show index update destroy ]
+  before_action :set_produto, only: %i[ show update destroy ]
   
   def index
     @produtos = Produto.all
