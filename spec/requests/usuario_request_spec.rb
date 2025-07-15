@@ -169,7 +169,7 @@ RSpec.describe "requisições de usuário", type: :request do
         )
       end
 
-      it "busca um usuário inexistente" do
+      it "não busca um usuário inexistente" do
         get "/usuarios/cpf/00000000000"
         expect(response).to have_http_status(:not_found)
       end
@@ -364,12 +364,15 @@ RSpec.describe "requisições de usuário", type: :request do
         .to receive(:authenticate_request!)
         .and_return(true)
     end
-    context "deleta usuário" do
+
+    context "deleta usuário com cpf existente" do
       it "deleta um usuário com sucesso" do
         delete "/usuarios/#{usuario.cpf}"
         expect(response).to have_http_status(:no_content)
       end
+    end
 
+    context "deleta usuário com cpf inexistente" do
       it "deleta um usuário inexistente" do
         delete "/usuarios/00000000000"
         expect(response).to have_http_status(:not_found)
