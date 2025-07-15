@@ -151,12 +151,12 @@ RSpec.describe "requisições de usuário", type: :request do
 
   describe "GET /usuarios/cpf" do
     context "busca usuário" do
-        let(:usuario) { create(:usuario) }
-        before do
-          allow_any_instance_of(ApplicationController)
-            .to receive(:authenticate_request!)
-            .and_return(true)
-        end
+      let(:usuario) { create(:usuario) }
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:authenticate_request!)
+          .and_return(true)
+      end
 
       it "busca um usuário com sucesso" do
         get "/usuarios/#{usuario.cpf}"
