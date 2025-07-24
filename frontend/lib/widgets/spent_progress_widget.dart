@@ -13,9 +13,7 @@ class SpentProgressWidget extends StatefulWidget {
 
 class SpentProgressWidgetState extends State<SpentProgressWidget> {
   String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
-    final prefs = await SharedPreferences.getInstance();
-
-  double totalValue = await SharedPreferences.;
+  
   @override
   Widget build(BuildContext context) {
     bool isPressed = false;
