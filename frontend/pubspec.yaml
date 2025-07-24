@@ -9,6 +9,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   flutter_screenutil: ^5.9.3
+  lucide_icons: ^0.257.0
+  intl: ^0.20.2
+  shared_preferences: ^2.5.3
 
 
 dev_dependencies:
