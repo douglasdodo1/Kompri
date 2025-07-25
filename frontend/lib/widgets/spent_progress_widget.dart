@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/services/shared_preferences_service.dart';
+import 'package:frontend/widgets/welcome_widget.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SpentProgressWidget extends StatefulWidget {
   const SpentProgressWidget({Key? key}) : super(key: key);
@@ -13,7 +14,32 @@ class SpentProgressWidget extends StatefulWidget {
 
 class SpentProgressWidgetState extends State<SpentProgressWidget> {
   String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
-  
+
+  String estimatedValue = "0";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEstimatedValue();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) => const WelcomeWidget(),
+      ).then((_) => _loadEstimatedValue());
+    });
+  }
+
+  Future<void> _loadEstimatedValue() async {
+    final prefs = await SharedPreferencesService.getInstance();
+    final value = prefs.getData('estimatedValue') ?? 0;
+    print(value);
+
+    setState(() {
+      estimatedValue = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isPressed = false;
@@ -28,7 +54,7 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
         ).showSnackBar(const SnackBar(content: Text('Kompri button tapped!')));
       },
       child: AnimatedScale(
-        scale: isPressed ? 0.98 : 1.0,
+        scale: 1.0,
         duration: const Duration(milliseconds: 100),
         child: Container(
           height: 200.h,
@@ -149,8 +175,10 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
                   SizedBox(
                     width: 120.w,
                     child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        'R\$ 1.000,00 total',
+                        'R\$ $estimatedValue total',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

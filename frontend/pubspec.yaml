@@ -12,6 +12,7 @@ dependencies:
   lucide_icons: ^0.257.0
   intl: ^0.20.2
   shared_preferences: ^2.5.3
+  auto_size_text: ^3.0.0
 
 
 dev_dependencies:
