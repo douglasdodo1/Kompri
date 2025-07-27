@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/services/shared_preferences_service.dart';
 import 'package:frontend/utils/format_to_cash.dart';
+import 'package:frontend/utils/set_spents.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -16,12 +17,6 @@ class WelcomeWidget extends StatefulWidget {
 class WelcomeWidgetState extends State<WelcomeWidget> {
   final TextEditingController _controller = TextEditingController();
 
-  Future<void> setValues(String value, context) async {
-    final prefs = await SharedPreferencesService.getInstance();
-    await prefs.saveData('estimatedValue', value);
-    Navigator.of(context).pop();
-  }
-
   String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
@@ -32,23 +27,28 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
           children: [
             Icon(LucideIcons.target, size: 20, color: const Color(0xFF6366F1)),
             SizedBox(width: 5.w),
-            Text("Defina seu orçamento"),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Defina seu orçamento',
+                style: TextStyle(fontSize: 22.sp),
+              ),
+            ),
           ],
         ),
       ),
       content: SizedBox(
         height: 200.h,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(height: 13.h),
             Text(
               "Qual valor você deseja gastar em compras esse mês?",
               textAlign: TextAlign.center,
               style: TextStyle(color: Color(0xFF475569)),
             ),
 
-            SizedBox(height: 13.h),
             Text(
               "Isso nos ajudará a acompanhar seus gastos e manter você no controle.",
               textAlign: TextAlign.center,
@@ -57,20 +57,28 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
 
             SizedBox(height: 17.h),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: Text("Orçamento para $mes de ${DateTime.now().year}"),
             ),
 
-            TextField(
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                CurrencyInputFormatter(),
-              ],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'R\$',
+            SizedBox(
+              height: 40.h,
+              width: 220.w,
+              child: TextField(
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter(),
+                ],
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'R\$',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                ),
               ),
             ),
           ],
@@ -82,7 +90,8 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
             width: 220.w,
             child: ElevatedButton(
               onPressed: () {
-                setValues(_controller.text, context);
+                setSpents(_controller.text);
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF4F46E5),
