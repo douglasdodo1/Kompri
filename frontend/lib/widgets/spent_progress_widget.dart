@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/services/shared_preferences_service.dart';
+import 'package:frontend/utils/format_to_cash.dart';
+import 'package:frontend/utils/set_spents.dart';
 import 'package:frontend/widgets/welcome_widget.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +17,9 @@ class SpentProgressWidget extends StatefulWidget {
 
 class SpentProgressWidgetState extends State<SpentProgressWidget> {
   String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
-
+  bool isEstimatedValue = false;
   String estimatedValue = "0";
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -33,10 +37,15 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
   Future<void> _loadEstimatedValue() async {
     final prefs = await SharedPreferencesService.getInstance();
     final value = prefs.getData('estimatedValue') ?? 0;
-    print(value);
-
     setState(() {
-      estimatedValue = value;
+      estimatedValue = value.toString();
+      _controller.text = value.toString().replaceAll(RegExp(r'[^0-9]'), '');
+    });
+  }
+
+  void setIsEditingEstimatedValue() {
+    setState(() {
+      isEstimatedValue = !isEstimatedValue;
     });
   }
 
@@ -69,7 +78,7 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
+                color: Colors.black.withOpacity(0.5),
                 blurRadius: 8.r,
                 offset: const Offset(0, 3),
               ),
@@ -77,6 +86,7 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,22 +95,58 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
                     mes,
                     style: TextStyle(fontSize: 20.sp, color: Colors.white),
                   ),
-                  Icon(LucideIcons.target, size: 20, color: Colors.grey[300]),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 32.h,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _controller.text = estimatedValue.replaceAll(
+                                RegExp(r'[^0-9]'),
+                                '',
+                              );
+                              setIsEditingEstimatedValue();
+                            });
+                          },
+                          icon: const Icon(Icons.edit, size: 14),
+                          label: Text(
+                            "Editar estimativa",
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                              side: const BorderSide(color: Colors.transparent),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Icon(
+                        LucideIcons.target,
+                        size: 20,
+                        color: Colors.grey[300],
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              SizedBox(height: 25.h),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Gasto até agora',
                         style: TextStyle(
                           fontSize: 13.sp,
-                          color: Color(0xFFCBD5E1),
+                          color: const Color(0xFFCBD5E1),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -113,34 +159,33 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
                               fontSize: 32.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontFeatures: [FontFeature.tabularFigures()],
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         'Restante',
                         style: TextStyle(
                           fontSize: 13.sp,
-                          color: Color(0xFFCBD5E1),
+                          color: const Color(0xFFCBD5E1),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       Text(
                         'R\$ 500,00',
                         style: TextStyle(
                           fontSize: 20.sp,
-                          color: Color(0xFF6EE7B7),
+                          color: const Color(0xFF6EE7B7),
                           fontWeight: FontWeight.w500,
-                          fontFeatures: [FontFeature.tabularFigures()],
+                          fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
                     ],
@@ -148,7 +193,6 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
                 ],
               ),
 
-              SizedBox(height: 25.h),
               Container(
                 height: 8.h,
                 decoration: BoxDecoration(
@@ -160,29 +204,56 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
                   child: LinearProgressIndicator(
                     value: 0.6,
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      Color.fromARGB(255, 15, 19, 22),
+                      const Color.fromARGB(255, 15, 19, 22),
                     ),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
               ),
 
-              SizedBox(height: 10.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('56% utilizado', style: TextStyle(color: Colors.white)),
-                  SizedBox(
-                    width: 120.w,
-                    child: FittedBox(
+                  if (!isEstimatedValue)
+                    FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'R\$ $estimatedValue total',
                         style: TextStyle(color: Colors.white),
                       ),
+                    )
+                  else
+                    SizedBox(
+                      width: 120.w,
+                      height: 30.h,
+                      child: TextField(
+                        onSubmitted: (value) {
+                          setSpents(value);
+                          _loadEstimatedValue();
+                        },
+                        controller: _controller,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          CurrencyInputFormatter(),
+                        ],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'R\$',
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ],
