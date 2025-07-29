@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/services/shared_preferences_service.dart';
-import 'package:frontend/utils/format_to_cash.dart';
-import 'package:frontend/utils/set_spents.dart';
+import 'package:frontend/core/utils/format_to_cash.dart';
+import 'package:frontend/core/utils/set_spents.dart';
+import 'package:frontend/domain/compras/entities/compras_entity.dart';
+import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
+import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
+import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class WelcomeWidget extends StatefulWidget {
-  const WelcomeWidget({Key? key}) : super(key: key);
+  const WelcomeWidget({super.key});
 
   @override
   State<WelcomeWidget> createState() => WelcomeWidgetState();
@@ -90,9 +94,26 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
             width: 220.w,
             child: ElevatedButton(
               onPressed: () {
-                setSpents(_controller.text);
+                final valorEstimado =
+                    double.tryParse(
+                      _controller.text.replaceAll(RegExp(r'[^0-9]'), ''),
+                    ) ??
+                    0;
+
+                final compra = ComprasEntity(
+                  id: 0,
+                  status: "aberta",
+                  valorTotal: 0,
+                  valorEstimado: valorEstimado,
+                  qtdItens: 0,
+                  usuarioCpf: "12345678900",
+                  instituicao: InstituicaoEntity(id: 1, nome: ""),
+                );
                 Navigator.pop(context);
+
+                context.read<ComprasBloc>().add(CriarCompra(compra));
               },
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF4F46E5),
                 foregroundColor: Colors.white,

@@ -14,13 +14,10 @@ class SharedPreferencesService {
 
   dynamic getData(String key) {
     var value = _preferences.get(key);
-    print('Retrieved $key: $value');
     return value;
   }
 
   Future<void> saveData(String key, dynamic value) async {
-    print('Saving $key: $value');
-
     if (value is String) {
       await _preferences.setString(key, value);
     } else if (value is int) {
