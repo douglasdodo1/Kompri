@@ -14,17 +14,13 @@ class CurrencyInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     String onlyDigits = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-    print(" ONLYDIGITS: $onlyDigits");
-
     if (onlyDigits.isEmpty) {
       return newValue.copyWith(text: '');
     }
 
     double value = double.parse(onlyDigits) / 100;
-    print(" VALUE: $value");
 
     final newString = _formatter.format(value).trim();
-    print(" NEWSTRING: $newString");
 
     return TextEditingValue(
       text: newString,
