@@ -1,4 +1,3 @@
-import 'package:frontend/data/compras/dtos/compras_dto.dart';
 import 'package:frontend/data/instituicoes/models/instituicao_model.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 
@@ -21,15 +20,15 @@ class ComprasModel {
     this.instituicao,
   );
 
-  factory ComprasModel.fromJDto(ComprasDTO dto) {
+  factory ComprasModel.fromJson(Map<String, dynamic> json) {
     return ComprasModel(
-      dto.id,
-      dto.status,
-      dto.valorTotal,
-      dto.valorEstimado,
-      dto.qtdItens,
-      dto.usuarioCpf,
-      InstituicaoModel.fromJDto(dto.instituicao),
+      json['id'],
+      json['status'],
+      json['valorTotal'],
+      json['valorEstimado'],
+      json['qtdItens'],
+      json['usuarioCpf'],
+      InstituicaoModel.fromJson(json['instituicao']),
     );
   }
 
@@ -37,8 +36,8 @@ class ComprasModel {
     return ComprasEntity(
       id: id,
       status: status,
-      valorTotal: valorTotal,
-      valorEstimado: valorEstimado.toString(),
+      valorTotal: valorTotal.toStringAsFixed(2),
+      valorEstimado: valorEstimado.toStringAsFixed(2),
       qtdItens: qtdItens,
       usuarioCpf: usuarioCpf,
       instituicao: instituicao.toEntity(),

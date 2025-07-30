@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/presentation/compras/pages/compras_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:frontend/services/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('pt_BR', null);
-
+  await di.init();
   runApp(const MyApp());
 }
 

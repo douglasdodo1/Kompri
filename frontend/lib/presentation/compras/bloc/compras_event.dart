@@ -20,6 +20,11 @@ class AtualizarValorEstimado extends ComprasEvent {
   AtualizarValorEstimado(this.valorEstimado);
 }
 
+class AtualizarCompra extends ComprasEvent {
+  final ComprasEntity compra;
+  AtualizarCompra(this.compra);
+}
+
 class BuscarCompraRecente extends ComprasEvent {
   BuscarCompraRecente();
 }

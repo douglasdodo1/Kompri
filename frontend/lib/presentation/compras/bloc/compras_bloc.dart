@@ -10,8 +10,9 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
   ComprasBloc(this.repository) : super(ComprasState.inicial()) {
     on<CriarCompra>(_criarCompra);
     on<BuscarComprasRecentes>(_buscarRecentes);
-    on<AtualizarValorEstimado>(_atualizarValorEstimado);
     on<BuscarCompraRecente>(_buscarCompraRecente);
+    on<AtualizarCompra>(_atualizarCompra);
+
     on<CarregarCompra>((event, emit) async {
       emit(state.copyWith(carregando: true));
       try {
@@ -27,7 +28,7 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     BuscarComprasRecentes event,
     Emitter<ComprasState> emit,
   ) async {
-    final recentes = await repository.buscarComprasRecentes();
+    //final recentes = await repository.buscarComprasRecentes();
   }
 
   Future<void> _criarCompra(
@@ -39,11 +40,13 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     emit(state.copyWith(compra: event.compra, sucesso: true));
   }
 
-  Future<void> _atualizarValorEstimado(
-    AtualizarValorEstimado event,
+
+  Future<void> _atualizarCompra(
+    AtualizarCompra event,
     Emitter<ComprasState> emit,
   ) async {
-    await repository.atualizarValorEstimado(event.valorEstimado);
+    ComprasEntity compra = await repository.atualizarCompra(event.compra);
+    emit(state.copyWith(compra: compra, sucesso: true));
   }
 
   Future<void> _buscarCompraRecente(

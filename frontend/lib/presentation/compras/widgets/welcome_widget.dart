@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/utils/format_to_cash.dart';
-import 'package:frontend/core/utils/set_spents.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
@@ -43,7 +42,7 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
         ),
       ),
       content: SizedBox(
-        height: 200.h,
+        height: 170.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -59,7 +58,6 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
               style: TextStyle(color: Color(0xFF64748B)),
             ),
 
-            SizedBox(height: 17.h),
             Align(
               alignment: Alignment.center,
               child: Text("Orçamento para $mes de ${DateTime.now().year}"),
@@ -99,7 +97,7 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
                 final compra = ComprasEntity(
                   id: 0,
                   status: "aberta",
-                  valorTotal: 0,
+                  valorTotal: "0.00",
                   valorEstimado: valorEstimado,
                   qtdItens: 0,
                   usuarioCpf: "12345678900",

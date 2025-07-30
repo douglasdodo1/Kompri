@@ -1,14 +1,13 @@
-import 'dart:ui'; // Para FontFeature
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/diferenca.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
 import 'package:frontend/core/utils/format_to_cash.dart';
-import 'package:frontend/core/utils/set_spents.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 
@@ -21,6 +20,7 @@ class SpentProgressWidget extends StatefulWidget {
 
 class _SpentProgressWidgetState extends State<SpentProgressWidget> {
   final TextEditingController _controller = TextEditingController();
+
   bool isEditing = false;
 
   @override
@@ -57,10 +57,8 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
         }
       },
       builder: (context, state) {
-        final compra = state.compra;
-        final valorEstimado = compra?.valorEstimado ?? '0.00';
-
-        print('Valor Estimado: $valorEstimado');
+        final ComprasEntity? compra = state.compra;
+        final String valorEstimado = compra?.valorEstimado ?? '0.00';
 
         return GestureDetector(
           onTapDown: (_) => FocusScope.of(context).unfocus(),
@@ -80,7 +78,7 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     blurRadius: 8.r,
                     offset: const Offset(0, 3),
                   ),
@@ -90,7 +88,6 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Cabeçalho com mês e botão de editar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -124,7 +121,6 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                     ],
                   ),
 
-                  // Valores de gasto e restante (fixos no exemplo)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -141,17 +137,15 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                           ),
                           SizedBox(
                             width: 150.w,
-                            child: FittedBox(
-                              child: Text(
-                                'R\$ 1.000,00',
-                                style: TextStyle(
-                                  fontSize: 32.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontFeatures: const [
-                                    FontFeature.tabularFigures(),
-                                  ],
-                                ),
+                            child: Text(
+                              'R\$ ${compra?.valorTotal ?? '0.000'}',
+                              style: TextStyle(
+                                fontSize: 35.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures(),
+                                ],
                               ),
                             ),
                           ),
@@ -169,7 +163,7 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                             ),
                           ),
                           Text(
-                            'R\$ 500,00',
+                            'R\$ ${calcularDiferenca(compra?.valorTotal, compra?.valorEstimado)}',
                             style: TextStyle(
                               fontSize: 20.sp,
                               color: const Color(0xFF6EE7B7),
@@ -184,7 +178,6 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                     ],
                   ),
 
-                  // Barra de progresso
                   Container(
                     height: 8.h,
                     decoration: BoxDecoration(
@@ -203,7 +196,6 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                     ),
                   ),
 
-                  // Linha final: exibe texto ou TextField para editar estimativa
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -240,14 +232,15 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                               ),
                             ),
                             onSubmitted: (value) {
-                              final novo =
-                                  double.tryParse(
-                                    value.replaceAll(RegExp(r'[^0-9]'), ''),
-                                  ) ??
-                                  0.0;
-                              context.read<ComprasBloc>().add(
-                                AtualizarValorEstimado(novo as String),
+                              final novaCompra = compra?.copyWith(
+                                valorEstimado: value,
                               );
+
+                              if (novaCompra != null) {
+                                context.read<ComprasBloc>().add(
+                                  AtualizarCompra(novaCompra),
+                                );
+                              }
                               _toggleEdit(valorEstimado);
                             },
                           ),

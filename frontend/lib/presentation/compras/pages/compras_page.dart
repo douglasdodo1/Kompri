@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
-import 'package:frontend/domain/compras/repositories/compras_repository.dart';
 import 'package:frontend/presentation/compras/widgets/analysis_widget.dart';
 import 'package:frontend/presentation/compras/widgets/spent_progress_widget.dart';
 import 'package:frontend/presentation/compras/widgets/welcome_widget.dart';
+import 'package:frontend/services/injection_container.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ComprasPage extends StatelessWidget {
@@ -15,14 +15,14 @@ class ComprasPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ComprasBloc(ComprasRepository())..add(CarregarCompra()),
+      create: (_) => sl<ComprasBloc>()..add(CarregarCompra()),
       child: const _ComprasView(),
     );
   }
 }
 
 class _ComprasView extends StatefulWidget {
-  const _ComprasView({super.key});
+  const _ComprasView();
 
   @override
   State<_ComprasView> createState() => _ComprasViewState();

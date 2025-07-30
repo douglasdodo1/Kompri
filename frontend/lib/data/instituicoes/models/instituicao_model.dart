@@ -11,6 +11,10 @@ class InstituicaoModel {
     return InstituicaoModel(dto.id, dto.nome);
   }
 
+  factory InstituicaoModel.fromJson(Map<String, dynamic> json) {
+    return InstituicaoModel(json['id'], json['nome']);
+  }
+
   Map<String, dynamic> toJson() => <String, dynamic>{'id': id, 'nome': nome};
 
   InstituicaoEntity toEntity() {
