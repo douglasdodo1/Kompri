@@ -4,13 +4,11 @@ class ComprasState {
   final List<ComprasEntity> comprasRecentes;
   final bool carregando;
   final ComprasEntity? compra;
-  final String valorEstimado;
   final String tendencia;
   final String? erro;
   final bool sucesso;
 
   ComprasState({
-    required this.valorEstimado,
     required this.comprasRecentes,
     required this.carregando,
     required this.compra,
@@ -24,7 +22,6 @@ class ComprasState {
     comprasRecentes: [],
     carregando: false,
     tendencia: "",
-    valorEstimado: "0",
     erro: null,
     sucesso: false,
   );
@@ -43,7 +40,6 @@ class ComprasState {
       comprasRecentes: comprasRecentes ?? this.comprasRecentes,
       carregando: carregando ?? this.carregando,
       tendencia: tendencia ?? this.tendencia,
-      valorEstimado: valorEstimado ?? this.valorEstimado,
       erro: erro,
       sucesso: sucesso ?? this.sucesso,
     );

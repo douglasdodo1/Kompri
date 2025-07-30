@@ -40,4 +40,9 @@ class ComprasDTO {
     'usuarioCpf': usuarioCpf,
     'instituicao': instituicao.toJson(),
   };
+
+  @override
+  toString() {
+    return 'ComprasDTO(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, instituicao: $instituicao)';
+  }
 }

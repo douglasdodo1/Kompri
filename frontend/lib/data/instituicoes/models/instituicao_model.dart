@@ -11,7 +11,8 @@ class InstituicaoModel {
     return InstituicaoModel(dto.id, dto.nome);
   }
 
-  InstituicaoDTO toDto() => InstituicaoModel(id, nome).toDto();
+  Map<String, dynamic> toJson() => <String, dynamic>{'id': id, 'nome': nome};
+
   InstituicaoEntity toEntity() {
     return InstituicaoEntity(id: id, nome: nome);
   }

@@ -38,20 +38,25 @@ class ComprasModel {
       id: id,
       status: status,
       valorTotal: valorTotal,
-      valorEstimado: valorEstimado,
+      valorEstimado: valorEstimado.toString(),
       qtdItens: qtdItens,
       usuarioCpf: usuarioCpf,
       instituicao: instituicao.toEntity(),
     );
   }
 
-  ComprasDTO toDto() => ComprasDTO(
-    id: id,
-    status: status,
-    valorTotal: valorTotal,
-    valorEstimado: valorEstimado,
-    qtdItens: qtdItens,
-    usuarioCpf: usuarioCpf,
-    instituicao: instituicao.toDto(),
-  );
+  Map toJson() => <String, dynamic>{
+    'id': id,
+    'status': status,
+    'valorTotal': valorTotal,
+    'valorEstimado': valorEstimado,
+    'qtdItens': qtdItens,
+    'usuarioCpf': usuarioCpf,
+    'instituicao': instituicao.toJson(),
+  };
+
+  @override
+  String toString() {
+    return 'ComprasModel(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, instituicao: $instituicao)';
+  }
 }

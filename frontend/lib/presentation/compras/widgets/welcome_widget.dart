@@ -94,11 +94,7 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
             width: 220.w,
             child: ElevatedButton(
               onPressed: () {
-                final valorEstimado =
-                    double.tryParse(
-                      _controller.text.replaceAll(RegExp(r'[^0-9]'), ''),
-                    ) ??
-                    0;
+                final valorEstimado = _controller.text;
 
                 final compra = ComprasEntity(
                   id: 0,

@@ -5,7 +5,7 @@ class ComprasEntity {
   final int id;
   final String status;
   final double valorTotal;
-  final double valorEstimado;
+  final String valorEstimado;
   final int qtdItens;
   final String usuarioCpf;
   final InstituicaoEntity instituicao;
@@ -25,7 +25,7 @@ class ComprasEntity {
       id,
       status,
       valorTotal,
-      valorEstimado,
+      double.tryParse(valorEstimado) ?? 0.0,
       qtdItens,
       usuarioCpf,
       instituicao.toModel(),

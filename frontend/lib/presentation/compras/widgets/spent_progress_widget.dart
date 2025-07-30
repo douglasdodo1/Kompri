@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
@@ -15,15 +16,12 @@ class SpentProgressWidget extends StatefulWidget {
   const SpentProgressWidget({super.key});
 
   @override
-  State<SpentProgressWidget> createState() => SpentProgressWidgetState();
+  State<SpentProgressWidget> createState() => _SpentProgressWidgetState();
 }
 
-class SpentProgressWidgetState extends State<SpentProgressWidget> {
-  String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
-  bool isEstimatedValue = false;
-  String estimatedValue = "0";
+class _SpentProgressWidgetState extends State<SpentProgressWidget> {
   final TextEditingController _controller = TextEditingController();
-  bool isPressed = false;
+  bool isEditing = false;
 
   @override
   void initState() {
@@ -31,241 +29,237 @@ class SpentProgressWidgetState extends State<SpentProgressWidget> {
     context.read<ComprasBloc>().add(BuscarCompraRecente());
   }
 
-  void setIsEditingEstimatedValue() {
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggleEdit(String valorAtual) {
     setState(() {
-      isEstimatedValue = !isEstimatedValue;
+      if (!isEditing) {
+        _controller.text = valorAtual.replaceAll(RegExp(r'[^0-9]'), '');
+      }
+      isEditing = !isEditing;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ComprasBloc, ComprasState>(
-      listenWhen: (previous, current) => previous.compra != current.compra,
-      listener: (context, state) {
-        print("AQUI");
-        final compraRecente = state.compra;
-        print("🔥 Compra recebida do bloc: $compraRecente");
+    final mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
 
-        if (compraRecente != null) {
-          setState(() {
-            estimatedValue = compraRecente.valorEstimado.toStringAsFixed(2);
-            _controller.text = estimatedValue.replaceAll(RegExp(r'[^0-9]'), '');
-          });
+    return BlocConsumer<ComprasBloc, ComprasState>(
+      listener: (context, state) {
+        final compra = state.compra;
+        if (compra != null) {
+          final val = compra.valorEstimado;
+          _controller.text = val.replaceAll(RegExp(r'[^0-9]'), '');
         }
       },
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => isPressed = true),
-        onTapUp: (_) => setState(() => isPressed = false),
-        onTapCancel: () => setState(() => isPressed = false),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Kompri button tapped!')),
-          );
-        },
-        child: AnimatedScale(
-          scale: isPressed ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            height: 200.h,
-            width: 400.w,
-            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
-            margin: EdgeInsets.symmetric(horizontal: 20.w),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: (0.5)),
-                  blurRadius: 8.r,
-                  offset: const Offset(0, 3),
+      builder: (context, state) {
+        final compra = state.compra;
+        final valorEstimado = compra?.valorEstimado ?? '0.00';
+
+        print('Valor Estimado: $valorEstimado');
+
+        return GestureDetector(
+          onTapDown: (_) => FocusScope.of(context).unfocus(),
+          child: AnimatedScale(
+            scale: 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: Container(
+              height: 200.h,
+              width: 400.w,
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
+              margin: EdgeInsets.symmetric(horizontal: 20.w),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-              ],
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      mes,
-                      style: TextStyle(fontSize: 20.sp, color: Colors.white),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 32.h,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _controller.text = estimatedValue.replaceAll(
-                                  RegExp(r'[^0-9]'),
-                                  '',
-                                );
-                                setIsEditingEstimatedValue();
-                              });
-                            },
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    blurRadius: 8.r,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Cabeçalho com mês e botão de editar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        mes,
+                        style: TextStyle(fontSize: 20.sp, color: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () => _toggleEdit(valorEstimado),
                             icon: const Icon(Icons.edit, size: 14),
                             label: Text(
-                              "Editar estimativa",
+                              "Editar",
                               style: TextStyle(fontSize: 12.sp),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               shadowColor: Colors.transparent,
                               elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                side: const BorderSide(
-                                  color: Colors.transparent,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Icon(
+                            LucideIcons.target,
+                            size: 20,
+                            color: Colors.grey[300],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // Valores de gasto e restante (fixos no exemplo)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Gasto até agora',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              color: const Color(0xFFCBD5E1),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 150.w,
+                            child: FittedBox(
+                              child: Text(
+                                'R\$ 1.000,00',
+                                style: TextStyle(
+                                  fontSize: 32.sp,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Icon(
-                          LucideIcons.target,
-                          size: 20,
-                          color: Colors.grey[300],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Gasto até agora',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            color: const Color(0xFFCBD5E1),
-                            fontWeight: FontWeight.bold,
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Restante',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              color: const Color(0xFFCBD5E1),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          Text(
+                            'R\$ 500,00',
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              color: const Color(0xFF6EE7B7),
+                              fontWeight: FontWeight.w500,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // Barra de progresso
+                  Container(
+                    height: 8.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Colors.grey[300],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: LinearProgressIndicator(
+                        value: 0.6,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          const Color.fromARGB(255, 15, 19, 22),
                         ),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    ),
+                  ),
+
+                  // Linha final: exibe texto ou TextField para editar estimativa
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '56% utilizado',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      if (!isEditing)
+                        Text(
+                          'R\$ $valorEstimado total',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      else
                         SizedBox(
-                          width: 150.w,
-                          child: FittedBox(
-                            child: Text(
-                              'R\$ 1.000,00',
-                              style: TextStyle(
-                                fontSize: 32.sp,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontFeatures: const [
-                                  FontFeature.tabularFigures(),
-                                ],
+                          width: 120.w,
+                          height: 30.h,
+                          child: TextField(
+                            controller: _controller,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyInputFormatter(),
+                            ],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
                               ),
                             ),
+                            onSubmitted: (value) {
+                              final novo =
+                                  double.tryParse(
+                                    value.replaceAll(RegExp(r'[^0-9]'), ''),
+                                  ) ??
+                                  0.0;
+                              context.read<ComprasBloc>().add(
+                                AtualizarValorEstimado(novo as String),
+                              );
+                              _toggleEdit(valorEstimado);
+                            },
                           ),
                         ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Restante',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            color: const Color(0xFFCBD5E1),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'R\$ 500,00',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            color: const Color(0xFF6EE7B7),
-                            fontWeight: FontWeight.w500,
-                            fontFeatures: const [FontFeature.tabularFigures()],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                Container(
-                  height: 8.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.grey[300],
+                    ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: LinearProgressIndicator(
-                      value: 0.6,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        const Color.fromARGB(255, 15, 19, 22),
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '56% utilizado',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    if (!isEstimatedValue)
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'R\$ $estimatedValue total',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                    else
-                      SizedBox(
-                        width: 120.w,
-                        height: 30.h,
-                        child: TextField(
-                          onSubmitted: (value) {
-                            setSpents(value);
-                            setIsEditingEstimatedValue();
-                          },
-                          controller: _controller,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            CurrencyInputFormatter(),
-                          ],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'R\$',
-                            isDense: true,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -33,7 +33,11 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
   Future<void> _criarCompra(
     CriarCompra event,
     Emitter<ComprasState> emit,
-  ) async {}
+  ) async {
+    await repository.criarCompra(event.compra);
+
+    emit(state.copyWith(compra: event.compra, sucesso: true));
+  }
 
   Future<void> _atualizarValorEstimado(
     AtualizarValorEstimado event,

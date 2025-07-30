@@ -17,8 +17,7 @@ class ComprasRepository {
   Future<void> criarCompra(ComprasEntity compra) async {
     final prefs = await SharedPreferencesService.getInstance();
     ComprasModel comprasModel = compra.toModel();
-    ComprasDTO comprasDTO = comprasModel.toDto();
-    final jsonString = jsonEncode(comprasDTO.toJson());
+    final jsonString = jsonEncode(comprasModel.toJson());
     await prefs.saveData('compra', jsonString);
   }
 
@@ -30,7 +29,7 @@ class ComprasRepository {
         id: -1,
         status: '',
         valorTotal: 0,
-        valorEstimado: 0,
+        valorEstimado: '0',
         qtdItens: 0,
         usuarioCpf: '',
         instituicao: InstituicaoEntity(id: -1, nome: ''),
