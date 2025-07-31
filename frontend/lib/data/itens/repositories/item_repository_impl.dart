@@ -1,3 +1,4 @@
+import 'package:frontend/core/mock/itens/itens_mock.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
 import 'package:frontend/domain/itens/repositories/item_repository.dart';
 
@@ -15,9 +16,8 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
-  Future<List<ItemEntity>> buscarItens() {
-    // TODO: implement buscarItens
-    throw UnimplementedError();
+  Future<List<ItemEntity>> buscarItens() async {
+    return itensMock;
   }
 
   @override

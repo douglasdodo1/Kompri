@@ -8,6 +8,8 @@ import 'package:frontend/presentation/compras/widgets/escolher_instituicao.dart'
 import 'package:frontend/presentation/compras/widgets/spent_progress_widget.dart';
 import 'package:frontend/presentation/compras/widgets/welcome_widget.dart';
 import 'package:frontend/presentation/itens/bloc/item_bloc.dart';
+import 'package:frontend/presentation/itens/bloc/item_event.dart';
+import 'package:frontend/presentation/itens/widgets/adicionar_item.dart';
 import 'package:frontend/presentation/itens/widgets/lista_itens_widget.dart';
 import 'package:frontend/services/injection_container.dart';
 
@@ -19,7 +21,7 @@ class ComprasPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => sl<ComprasBloc>()..add(CarregarCompra())),
-        BlocProvider(create: (_) => sl<ItemBloc>()),
+        BlocProvider(create: (_) => sl<ItemBloc>()..add(BuscarItens())),
       ],
       child: const _ComprasView(),
     );
@@ -61,14 +63,13 @@ class _ComprasViewState extends State<_ComprasView> {
           title: const Text("Kompri - Compras"),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: <Widget>[
               SizedBox(height: 24.h),
               const SpentProgressWidget(),
               SizedBox(height: 15.h),
-              EscolherInstituicao(),
-              SizedBox(height: 24.h),
+              AdicionarItem(),
+              SizedBox(height: 2.h),
               ListaItens(),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/presentation/itens/bloc/item_bloc.dart';
 import 'package:frontend/presentation/itens/bloc/item_event.dart';
 import 'package:frontend/presentation/itens/bloc/item_state.dart';
@@ -12,45 +13,10 @@ class ListaItens extends StatefulWidget {
 }
 
 class _ListaItensState extends State<ListaItens> {
-  int? editingPriceId;
-  double? tempPrice;
-
   @override
   void initState() {
     super.initState();
     context.read<ItemBloc>().add(BuscarItens());
-  }
-
-  void startEditingPrice(int itemId, double currentPrice) {
-    setState(() {
-      editingPriceId = itemId;
-      tempPrice = currentPrice;
-    });
-  }
-
-  void onTempPriceChanged(String value) {
-    final newPrice = double.tryParse(value.replaceAll(',', '.'));
-    if (newPrice != null) {
-      tempPrice = newPrice;
-    }
-  }
-
-  void onEditingFinished() {
-    if (editingPriceId != null && tempPrice != null) {
-      final bloc = context.read<ItemBloc>();
-      final item = bloc.state.itens.firstWhere((e) => e.id == editingPriceId);
-      final updated = item.copyWith(valor: tempPrice!);
-      bloc.add(AtualizarItens(item: updated));
-    }
-
-    setState(() {
-      editingPriceId = null;
-      tempPrice = null;
-    });
-  }
-
-  void simulateBarcodeScan(int itemId) {
-    debugPrint('Simulando leitura de código de barras para item $itemId');
   }
 
   @override
@@ -58,238 +24,211 @@ class _ListaItensState extends State<ListaItens> {
     return BlocBuilder<ItemBloc, ItemState>(
       builder: (context, state) {
         final items = state.itens;
-
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeOut,
-          transform: Matrix4.translationValues(0, 0, 0),
-          child: Card(
-            margin: const EdgeInsets.all(16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+        if (items.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 60,
+                  color: Colors.grey[300],
+                ),
+                SizedBox(height: 16.h),
+                const Text(
+                  "Nenhum item ainda",
+                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+                const Text(
+                  "Adicione um produto acima",
+                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                ),
+              ],
             ),
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: items.isEmpty
-                  ? Center(
+          );
+        }
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            child: Column(
+              children: items.map((item) {
+                final precoUnit = item.valor
+                    .toStringAsFixed(2)
+                    .replaceAll('.', ',');
+                final precoTotal = (item.valor * item.quantidade)
+                    .toStringAsFixed(2)
+                    .replaceAll('.', ',');
+                final isBought = item.comprado;
+                final marcaController = TextEditingController(
+                  text: item.produto.marca ?? "",
+                );
+
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: Material(
+                    elevation: isBought ? 0 : 2,
+                    borderRadius: BorderRadius.circular(10.r),
+                    color: isBought ? Colors.green.shade50 : Colors.white,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 12.h,
+                      ),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            size: 50,
-                            color: Colors.grey[300],
+                          // Marca editável
+                          TextField(
+                            controller: marcaController,
+                            decoration: InputDecoration(
+                              hintText: "Marca (editar)",
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.h,
+                                horizontal: 12.w,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                            ),
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey[800],
+                            ),
+                            onSubmitted: (value) {
+                              final updatedProduto = item.produto.copyWith(
+                                marca: value,
+                              );
+                              final updatedItem = item.copyWith(
+                                produto: updatedProduto,
+                              );
+                              context.read<ItemBloc>().add(
+                                AtualizarItens(item: updatedItem),
+                              );
+                            },
                           ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            "Nenhum item adicionado ainda",
-                            style: TextStyle(color: Colors.grey),
+                          SizedBox(height: 8.h),
+
+                          // Nome do produto
+                          Text(
+                            item.produto.nome,
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              decoration: isBought
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              color: isBought ? Colors.grey : Colors.black87,
+                            ),
                           ),
-                          const Text(
-                            "Comece digitando o nome de um produto acima",
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          SizedBox(height: 10.h),
+
+                          // Linha de controles
+                          Row(
+                            children: [
+                              // Rádio de comprado
+                              Radio<bool>(
+                                value: true,
+                                groupValue: isBought,
+                                onChanged: (v) {
+                                  final updated = item.copyWith(comprado: v!);
+                                  context.read<ItemBloc>().add(
+                                    AtualizarItens(item: updated),
+                                  );
+                                },
+                              ),
+
+                              // Preço unitário
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  'R\$ $precoUnit / un',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: isBought
+                                        ? Colors.grey
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 16.w),
+
+                              // Quantidade
+                              IconButton(
+                                icon: Icon(Icons.remove, size: 20.sp),
+                                onPressed: item.quantidade > 1
+                                    ? () {
+                                        final updated = item.copyWith(
+                                          quantidade: item.quantidade - 1,
+                                        );
+                                        context.read<ItemBloc>().add(
+                                          AtualizarItens(item: updated),
+                                        );
+                                      }
+                                    : null,
+                              ),
+                              Text(
+                                '${item.quantidade}',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: isBought
+                                      ? Colors.grey
+                                      : Colors.black87,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add, size: 20.sp),
+                                onPressed: () {
+                                  final updated = item.copyWith(
+                                    quantidade: item.quantidade + 1,
+                                  );
+                                  context.read<ItemBloc>().add(
+                                    AtualizarItens(item: updated),
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 16.w),
+
+                              // Preço total
+                              Expanded(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'Total: R\$ $precoTotal',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: isBought
+                                          ? Colors.grey
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              // Lixeira
+                              IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 24.sp,
+                                ),
+                                onPressed: () {
+                                  context.read<ItemBloc>().add(
+                                    DeletarItem(itemId: item.id),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    )
-                  : Column(
-                      children: items.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final item = entry.value;
-
-                        return AnimatedContainer(
-                          duration: Duration(milliseconds: 300 + index * 100),
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: item.comprado
-                                ? Colors.green[50]
-                                : Colors.grey[100],
-                            border: Border.all(
-                              color: item.comprado
-                                  ? Colors.green[200]!
-                                  : Colors.grey[300]!,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      final updated = item.copyWith(
-                                        comprado: !item.comprado,
-                                      );
-                                      context.read<ItemBloc>().add(
-                                        AtualizarItens(item: updated),
-                                      );
-                                    },
-                                    child: Icon(
-                                      item.comprado
-                                          ? Icons.check_circle
-                                          : Icons.circle_outlined,
-                                      color: item.comprado
-                                          ? Colors.green
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      item.produto.nome,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        decoration: item.comprado
-                                            ? TextDecoration.lineThrough
-                                            : null,
-                                        color: item.comprado
-                                            ? Colors.green[800]
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  if (item.valor == 0)
-                                    const Chip(
-                                      label: Text("Sem preço"),
-                                      backgroundColor: Color(0xFFFFF7E0),
-                                      labelStyle: TextStyle(
-                                        color: Colors.orange,
-                                      ),
-                                    ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      context.read<ItemBloc>().add(
-                                        DeletarItem(itemId: item.id),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.remove),
-                                    onPressed: item.quantidade > 1
-                                        ? () {
-                                            final updated = item.copyWith(
-                                              quantidade: item.quantidade - 1,
-                                            );
-                                            context.read<ItemBloc>().add(
-                                              AtualizarItens(item: updated),
-                                            );
-                                          }
-                                        : null,
-                                  ),
-                                  Text(
-                                    "${item.quantidade}",
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.add),
-                                    onPressed: () {
-                                      final updated = item.copyWith(
-                                        quantidade: item.quantidade + 1,
-                                      );
-                                      context.read<ItemBloc>().add(
-                                        AtualizarItens(item: updated),
-                                      );
-                                    },
-                                  ),
-                                  const Spacer(),
-                                  editingPriceId == item.id
-                                      ? Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.attach_money,
-                                              size: 16,
-                                            ),
-                                            SizedBox(
-                                              width: 60,
-                                              child: TextField(
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                onChanged: onTempPriceChanged,
-                                                onSubmitted: (_) =>
-                                                    onEditingFinished(),
-                                                autofocus: true,
-                                                decoration:
-                                                    const InputDecoration(
-                                                      isDense: true,
-                                                    ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : GestureDetector(
-                                          onTap: () => startEditingPrice(
-                                            item.id,
-                                            item.valor,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.attach_money,
-                                                size: 16,
-                                              ),
-                                              Text(
-                                                item.valor
-                                                    .toStringAsFixed(2)
-                                                    .replaceAll('.', ','),
-                                                style: TextStyle(
-                                                  color: item.valor == 0
-                                                      ? Colors.orange
-                                                      : Colors.black87,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.camera_alt,
-                                      size: 16,
-                                      color: Colors.indigo,
-                                    ),
-                                    onPressed: () =>
-                                        simulateBarcodeScan(item.id),
-                                  ),
-                                ],
-                              ),
-                              if (item.valor > 0) ...[
-                                const Divider(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      "Total do item:",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    Text(
-                                      "R\$ ${(item.valor * item.quantidade).toStringAsFixed(2).replaceAll('.', ',')}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ],
-                          ),
-                        );
-                      }).toList(),
                     ),
+                  ),
+                );
+              }).toList(),
             ),
           ),
         );
