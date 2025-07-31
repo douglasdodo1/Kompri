@@ -1,5 +1,5 @@
 import 'package:frontend/domain/itens/entities/item_entity.dart';
-import 'package:frontend/domain/produtos/repositories/produto_repository.dart';
+import 'package:frontend/domain/itens/repositories/item_repository.dart';
 
 class ItemRepositoryImpl implements ItemRepository {
   @override
@@ -9,14 +9,14 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
-  Future<List<ItemEntity>> getItens() {
-    // TODO: implement getItems
+  Future<ItemEntity> buscarItem(int id) {
+    // TODO: implement buscarItem
     throw UnimplementedError();
   }
 
   @override
-  Future<ItemEntity> getItem(int id) {
-    // TODO: implement getItem
+  Future<List<ItemEntity>> buscarItens() {
+    // TODO: implement buscarItens
     throw UnimplementedError();
   }
 

@@ -7,6 +7,8 @@ import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/widgets/escolher_instituicao.dart';
 import 'package:frontend/presentation/compras/widgets/spent_progress_widget.dart';
 import 'package:frontend/presentation/compras/widgets/welcome_widget.dart';
+import 'package:frontend/presentation/itens/bloc/item_bloc.dart';
+import 'package:frontend/presentation/itens/widgets/lista_itens_widget.dart';
 import 'package:frontend/services/injection_container.dart';
 
 class ComprasPage extends StatelessWidget {
@@ -14,8 +16,11 @@ class ComprasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<ComprasBloc>()..add(CarregarCompra()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<ComprasBloc>()..add(CarregarCompra())),
+        BlocProvider(create: (_) => sl<ItemBloc>()),
+      ],
       child: const _ComprasView(),
     );
   }
@@ -64,6 +69,7 @@ class _ComprasViewState extends State<_ComprasView> {
               SizedBox(height: 15.h),
               EscolherInstituicao(),
               SizedBox(height: 24.h),
+              ListaItens(),
             ],
           ),
         ),
