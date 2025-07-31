@@ -8,6 +8,15 @@ class ProdutoModel {
 
   ProdutoModel(this.id, this.nome, this.marca, this.categoria);
 
+  factory ProdutoModel.fromJson(Map<String, dynamic> json) {
+    return ProdutoModel(
+      json['id'],
+      json['nome'],
+      json['marca'],
+      json['categoria'],
+    );
+  }
+
   Map toJson() => <String, dynamic>{
     'id': id,
     'nome': nome,
