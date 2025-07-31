@@ -1,4 +1,3 @@
-import 'package:frontend/data/instituicoes/dtos/instituicao_dto.dart';
 import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 
 class InstituicaoModel {
@@ -6,10 +5,6 @@ class InstituicaoModel {
   final String nome;
 
   InstituicaoModel(this.id, this.nome);
-
-  factory InstituicaoModel.fromJDto(InstituicaoDTO dto) {
-    return InstituicaoModel(dto.id, dto.nome);
-  }
 
   factory InstituicaoModel.fromJson(Map<String, dynamic> json) {
     return InstituicaoModel(json['id'], json['nome']);

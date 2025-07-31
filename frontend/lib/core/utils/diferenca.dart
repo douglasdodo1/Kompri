@@ -8,5 +8,6 @@ String calcularDiferenca(String? valor1, String? valor2) {
 
   final double diff = v1 - v2;
 
+  if (diff <= 0) return '0.00';
   return diff.toStringAsFixed(2);
 }

@@ -47,21 +47,8 @@ class ComprasRepositoryImpl implements ComprasRepository {
   @override
   Future<ComprasEntity> atualizarCompra(ComprasEntity compra) async {
     final prefs = await SharedPreferencesService.getInstance();
-
-    ComprasModel compraCache = ComprasModel.fromJson(
-      jsonDecode(prefs.getData('compra') ?? '{}'),
-    );
-
-    final ComprasEntity compraAtualizada = compraCache.toEntity().copyWith(
-      status: compra.status,
-      valorTotal: compra.valorTotal,
-      valorEstimado: compra.valorEstimado,
-      qtdItens: compra.qtdItens,
-      instituicao: compra.instituicao,
-    );
-
-    final ComprasModel compraAtualizadaModel = compraAtualizada.toModel();
-    prefs.saveData('compra', jsonEncode(compraAtualizadaModel.toJson()));
-    return compraAtualizada;
+    final ComprasModel compraModel = compra.toModel();
+    prefs.saveData('compra', jsonEncode(compraModel.toJson()));
+    return compra;
   }
 }

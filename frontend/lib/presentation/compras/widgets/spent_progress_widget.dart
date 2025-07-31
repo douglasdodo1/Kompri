@@ -163,7 +163,7 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                             ),
                           ),
                           Text(
-                            'R\$ ${calcularDiferenca(compra?.valorTotal, compra?.valorEstimado)}',
+                            'R\$ ${calcularDiferenca(compra?.valorEstimado, compra?.valorTotal)}',
                             style: TextStyle(
                               fontSize: 20.sp,
                               color: const Color(0xFF6EE7B7),
