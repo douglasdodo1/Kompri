@@ -35,11 +35,7 @@ class _AdicionarItemState extends State<AdicionarItem> {
       comprado: false,
     );
 
-    final novaCompra = compraAtual.copyWith(
-      itens: [...compraAtual.itens, novoItem],
-    );
-
-    context.read<ComprasBloc>().add(AtualizarCompra(novaCompra));
+    context.read<ComprasBloc>().add(AtualizarCompra(item: novoItem));
     _controller.clear();
   }
 

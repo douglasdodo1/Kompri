@@ -105,7 +105,7 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
                   instituicao: InstituicaoEntity(id: 1, nome: ""),
                 );
                 Navigator.pop(context);
-
+                print("compra: $compra");
                 context.read<ComprasBloc>().add(CriarCompra(compra));
               },
 

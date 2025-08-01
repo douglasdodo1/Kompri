@@ -232,15 +232,9 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                               ),
                             ),
                             onSubmitted: (value) {
-                              final novaCompra = compra?.copyWith(
-                                valorEstimado: value,
+                              context.read<ComprasBloc>().add(
+                                AtualizarCompra(valorEstimado: value),
                               );
-
-                              if (novaCompra != null) {
-                                context.read<ComprasBloc>().add(
-                                  AtualizarCompra(novaCompra),
-                                );
-                              }
                               _toggleEdit(valorEstimado);
                             },
                           ),

@@ -20,7 +20,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
   }
 
   Future<void> _buscarItens(BuscarItens event, Emitter<ItemState> emit) async {
-    final itens = await usecase.buscarItens();
+    final itens = await usecase.buscarItens(3);
     emit(state.copyWith(itens: itens));
   }
 

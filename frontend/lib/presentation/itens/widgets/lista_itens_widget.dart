@@ -62,6 +62,7 @@ class _ListaItensState extends State<ListaItens> {
   Widget build(BuildContext context) {
     return BlocBuilder<ComprasBloc, ComprasState>(
       builder: (context, state) {
+        final compra = state.compra;
         final items = state.compra?.itens ?? [];
         if (items.isEmpty) {
           return const ListaItensVaziaWidget();
@@ -151,7 +152,7 @@ class _ListaItensState extends State<ListaItens> {
                                       ),
                                     );
                                     context.read<ComprasBloc>().add(
-                                      AtualizarCompra(marca:atualizado),
+                                      AtualizarCompra(item: atualizado),
                                     );
                                   },
                                 ),
@@ -170,7 +171,7 @@ class _ListaItensState extends State<ListaItens> {
                                       ),
                                     );
                                     context.read<ComprasBloc>().add(
-                                      AtualizarItens(item: atualizado),
+                                      AtualizarCompra(item: atualizado),
                                     );
                                   },
                                 ),

@@ -16,7 +16,7 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
-  Future<List<ItemEntity>> buscarItens() async {
+  Future<List<ItemEntity>> buscarItens(int id) async {
     return itensMock;
   }
 

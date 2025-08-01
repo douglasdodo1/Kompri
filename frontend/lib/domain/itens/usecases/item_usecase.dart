@@ -8,7 +8,8 @@ class ItemUsecase {
 
   Future<void> criarItem(ItemEntity item) => itemRepository.criarItem(item);
 
-  Future<List<ItemEntity>> buscarItens() => itemRepository.buscarItens();
+  Future<List<ItemEntity>> buscarItens(int id) =>
+      itemRepository.buscarItens(id);
 
   Future<ItemEntity> buscarItem(int id) => itemRepository.buscarItem(id);
 

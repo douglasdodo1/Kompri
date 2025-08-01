@@ -45,8 +45,21 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     AtualizarCompra event,
     Emitter<ComprasState> emit,
   ) async {
-    ComprasEntity compra = await usecase.atualizarCompra(event.compra);
-    emit(state.copyWith(compra: compra, sucesso: true));
+    final compraAtual = state.compra;
+    if (compraAtual == null) return;
+
+    print('compra atual: $compraAtual');
+
+    final compraSalva = await usecase.atualizarCompra(
+      event.status ?? compraAtual.status,
+      event.valorTotal ?? compraAtual.valorTotal,
+      event.valorEstimado ?? compraAtual.valorEstimado,
+      event.qtdItens ?? compraAtual.qtdItens,
+      event.item,
+      event.instituicao ?? compraAtual.instituicao,
+    );
+
+    emit(state.copyWith(compra: compraSalva));
   }
 
   Future<void> _buscarCompraRecente(

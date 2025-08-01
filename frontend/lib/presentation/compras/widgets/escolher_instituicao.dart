@@ -64,15 +64,12 @@ class _EscolherInstituicaoState extends State<EscolherInstituicao> {
                     ),
                     TextField(
                       onChanged: (value) {
-                        final ComprasEntity compraEditada = state.compra!
-                            .copyWith(
-                              instituicao: InstituicaoEntity(
-                                id: -1,
-                                nome: value,
-                              ),
-                            );
+                        final instituicao = InstituicaoEntity(
+                          id: 0,
+                          nome: value.trim(),
+                        );
                         context.read<ComprasBloc>().add(
-                          AtualizarCompra(compraEditada),
+                          AtualizarCompra(instituicao: instituicao),
                         );
                       },
                       decoration: InputDecoration(
