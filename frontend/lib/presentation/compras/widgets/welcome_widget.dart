@@ -101,6 +101,7 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
                   valorEstimado: valorEstimado,
                   qtdItens: 0,
                   usuarioCpf: "12345678900",
+                  itens: [],
                   instituicao: InstituicaoEntity(id: 1, nome: ""),
                 );
                 Navigator.pop(context);

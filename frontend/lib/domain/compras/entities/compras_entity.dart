@@ -1,5 +1,6 @@
 import 'package:frontend/data/compras/models/compras_model.dart';
 import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
+import 'package:frontend/domain/itens/entities/item_entity.dart';
 
 class ComprasEntity {
   final int? id;
@@ -8,6 +9,7 @@ class ComprasEntity {
   final String valorEstimado;
   final int qtdItens;
   final String usuarioCpf;
+  final List<ItemEntity> itens;
   final InstituicaoEntity instituicao;
 
   ComprasEntity({
@@ -17,8 +19,9 @@ class ComprasEntity {
     required this.valorEstimado,
     required this.qtdItens,
     required this.usuarioCpf,
+    List<ItemEntity>? itens,
     required this.instituicao,
-  });
+  }) : itens = itens ?? [];
 
   ComprasModel toModel() {
     return ComprasModel(
@@ -28,6 +31,7 @@ class ComprasEntity {
       double.tryParse(valorEstimado) ?? 0.00,
       qtdItens,
       usuarioCpf,
+      itens.map((e) => e.toModel()).toList(),
       instituicao.toModel(),
     );
   }
@@ -39,6 +43,7 @@ class ComprasEntity {
     String? valorEstimado,
     int? qtdItens,
     String? usuarioCpf,
+    List<ItemEntity>? itens,
     InstituicaoEntity? instituicao,
   }) {
     return ComprasEntity(
@@ -48,12 +53,13 @@ class ComprasEntity {
       valorEstimado: valorEstimado ?? this.valorEstimado,
       qtdItens: qtdItens ?? this.qtdItens,
       usuarioCpf: usuarioCpf ?? this.usuarioCpf,
+      itens: itens ?? this.itens,
       instituicao: instituicao ?? this.instituicao,
     );
   }
 
   @override
   String toString() {
-    return 'CompraEntity(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, instituicao: $instituicao)';
+    return 'ComprasEntity(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: $itens, instituicao: $instituicao)';
   }
 }

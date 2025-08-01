@@ -1,4 +1,5 @@
 import 'package:frontend/data/instituicoes/models/instituicao_model.dart';
+import 'package:frontend/data/itens/models/item_model.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 
 class ComprasModel {
@@ -8,6 +9,7 @@ class ComprasModel {
   final double valorEstimado;
   final int qtdItens;
   final String usuarioCpf;
+  final List<ItemModel> itens;
   final InstituicaoModel instituicao;
 
   ComprasModel(
@@ -17,6 +19,7 @@ class ComprasModel {
     this.valorEstimado,
     this.qtdItens,
     this.usuarioCpf,
+    this.itens,
     this.instituicao,
   );
 
@@ -28,6 +31,7 @@ class ComprasModel {
       json['valorEstimado'],
       json['qtdItens'],
       json['usuarioCpf'],
+      (json['itens'] as List).map((e) => ItemModel.fromJson(e)).toList(),
       InstituicaoModel.fromJson(json['instituicao']),
     );
   }
@@ -40,6 +44,7 @@ class ComprasModel {
       valorEstimado: valorEstimado.toStringAsFixed(2),
       qtdItens: qtdItens,
       usuarioCpf: usuarioCpf,
+      itens: itens.map((e) => e.toEntity()).toList(),
       instituicao: instituicao.toEntity(),
     );
   }
@@ -51,11 +56,12 @@ class ComprasModel {
     'valorEstimado': valorEstimado,
     'qtdItens': qtdItens,
     'usuarioCpf': usuarioCpf,
+    'itens': itens.map((e) => e.toJson()).toList(),
     'instituicao': instituicao.toJson(),
   };
 
   @override
   String toString() {
-    return 'ComprasModel(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, instituicao: $instituicao)';
+    return 'ComprasModel(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: $itens, instituicao: $instituicao)';
   }
 }

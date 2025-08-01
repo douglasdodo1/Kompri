@@ -9,6 +9,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '1300.00',
     qtdItens: 5,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 1, nome: 'Instituto Alpha'),
   ),
   ComprasEntity(
@@ -18,6 +19,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '950.00',
     qtdItens: 3,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 2, nome: 'Escola Beta'),
   ),
   ComprasEntity(
@@ -27,6 +29,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '470.00',
     qtdItens: 2,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 3, nome: 'Universidade Gama'),
   ),
   ComprasEntity(
@@ -36,6 +39,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '600.00',
     qtdItens: 6,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 4, nome: 'Faculdade Delta'),
   ),
   ComprasEntity(
@@ -45,6 +49,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '1500.00',
     qtdItens: 10,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 5, nome: 'IF Omega'),
   ),
   ComprasEntity(
@@ -54,6 +59,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '340.00',
     qtdItens: 4,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 6, nome: 'Colégio Zeta'),
   ),
   ComprasEntity(
@@ -63,6 +69,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '800.00',
     qtdItens: 3,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 7, nome: 'Escola Sigma'),
   ),
   ComprasEntity(
@@ -72,6 +79,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '2100.00',
     qtdItens: 7,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 8, nome: 'Centro Educacional Teta'),
   ),
   ComprasEntity(
@@ -81,6 +89,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '400.00',
     qtdItens: 1,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 9, nome: 'Instituto Kappa'),
   ),
   ComprasEntity(
@@ -90,6 +99,7 @@ final List<ComprasEntity> comprasMock = [
     valorEstimado: '1000.00',
     qtdItens: 6,
     usuarioCpf: '12345678901',
+    itens: [],
     instituicao: InstituicaoEntity(id: 10, nome: 'Instituição Lambda'),
   ),
 ];

@@ -26,6 +26,7 @@ class ComprasRepositoryImpl implements ComprasRepository {
         valorEstimado: '0.00',
         qtdItens: 0,
         usuarioCpf: '',
+        itens: [],
         instituicao: InstituicaoEntity(id: -1, nome: ''),
       );
     }
@@ -45,10 +46,39 @@ class ComprasRepositoryImpl implements ComprasRepository {
   }
 
   @override
-  Future<ComprasEntity> atualizarCompra(ComprasEntity compra) async {
+  Future<ComprasEntity> atualizarCompra(
+    String? status,
+    String? valorTotal,
+    String? valorEstimado,
+    int? qtdItens,
+    InstituicaoEntity? instituicao,
+    String? marca,
+  ) async {
     final prefs = await SharedPreferencesService.getInstance();
-    final ComprasModel compraModel = compra.toModel();
-    prefs.saveData('compra', jsonEncode(compraModel.toJson()));
-    return compra;
+    final compraJsonString = prefs.getData('compra');
+
+    if (compraJsonString == null) {
+      throw Exception('Nenhuma compra salva encontrada.');
+    }
+
+    final Map<String, dynamic> compraJson = jsonDecode(compraJsonString);
+
+    final compraSalva = ComprasModel.fromJson(compraJson).toEntity();
+
+    final compraAtualizada = compraSalva.copyWith(
+      status: status,
+      valorTotal: valorTotal,
+      valorEstimado: valorEstimado,
+      qtdItens: qtdItens,
+      instituicao: instituicao,
+      // marca não faz parte da compra, provavelmente deve atualizar o Item ou Produto,
+      // então precisa lógica específica se quiser alterar isso aqui
+    );
+
+    // Salvar a compra atualizada
+    final compraModel = compraAtualizada.toModel();
+    await prefs.saveData('compra', jsonEncode(compraModel.toJson()));
+
+    return compraAtualizada;
   }
 }
