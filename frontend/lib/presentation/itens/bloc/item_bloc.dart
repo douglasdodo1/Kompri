@@ -17,10 +17,11 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     await usecase.criarItem(event.item);
 
     emit(state.copyWith(sucesso: true));
+    emit(state.copyWith(sucesso: false));
   }
 
   Future<void> _buscarItens(BuscarItens event, Emitter<ItemState> emit) async {
-    final itens = await usecase.buscarItens(3);
+    final itens = await usecase.buscarItens();
     emit(state.copyWith(itens: itens));
   }
 

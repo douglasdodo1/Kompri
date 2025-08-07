@@ -57,7 +57,6 @@ class ComprasRepositoryImpl implements ComprasRepository {
     String? valorTotal,
     String? valorEstimado,
     int? qtdItens,
-    ItemEntity? item,
     InstituicaoEntity? instituicao,
   ) async {
     final prefs = await SharedPreferencesService.getInstance();
@@ -67,14 +66,9 @@ class ComprasRepositoryImpl implements ComprasRepository {
       throw Exception('Nenhuma compra salva encontrada.');
     }
 
-    if (valorEstimado != null) {
-      print('valor estimado: ${virgulaParaPonto(valorEstimado)}');
-    }
-
     final Map<String, dynamic> compraJson = jsonDecode(compraJsonString);
 
     final compraSalva = ComprasModel.fromJson(compraJson).toEntity();
-    print('compra salva: $compraSalva');
 
     final compraAtualizada = compraSalva.copyWith(
       status: status,
@@ -82,10 +76,7 @@ class ComprasRepositoryImpl implements ComprasRepository {
       valorEstimado: valorEstimado,
       qtdItens: qtdItens,
       instituicao: instituicao,
-      itens: item == null ? compraSalva.itens : [...compraSalva.itens, item],
     );
-
-    print('compra atualizada: $compraAtualizada');
 
     final compraModel = compraAtualizada.toModel();
     await prefs.saveData('compra', jsonEncode(compraModel.toJson()));

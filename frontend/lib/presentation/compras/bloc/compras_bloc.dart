@@ -1,6 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/domain/compras/entities/compras_entity.dart';
-import 'package:frontend/domain/compras/repositories/compras_repository.dart';
 import 'package:frontend/domain/compras/usecases/compra_usecase.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
@@ -55,7 +53,6 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
       event.valorTotal ?? compraAtual.valorTotal,
       event.valorEstimado ?? compraAtual.valorEstimado,
       event.qtdItens ?? compraAtual.qtdItens,
-      event.item,
       event.instituicao ?? compraAtual.instituicao,
     );
 

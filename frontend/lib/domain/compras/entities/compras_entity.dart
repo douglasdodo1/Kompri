@@ -60,6 +60,6 @@ class ComprasEntity {
 
   @override
   String toString() {
-    return 'ComprasEntity(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: $itens, instituicao: $instituicao)';
+    return 'ComprasEntity(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: ${itens.toString()}, instituicao: $instituicao)';
   }
 }

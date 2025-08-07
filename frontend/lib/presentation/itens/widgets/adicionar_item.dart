@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
 import 'package:frontend/domain/produtos/entities/produto_entity.dart';
-import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
-import 'package:frontend/presentation/compras/bloc/compras_event.dart';
-import 'package:frontend/presentation/compras/bloc/compras_state.dart';
+import 'package:frontend/presentation/itens/bloc/item_bloc.dart';
+import 'package:frontend/presentation/itens/bloc/item_event.dart';
+import 'package:frontend/presentation/itens/bloc/item_state.dart';
 
 class AdicionarItem extends StatefulWidget {
   const AdicionarItem({super.key});
@@ -17,13 +16,10 @@ class AdicionarItem extends StatefulWidget {
 class _AdicionarItemState extends State<AdicionarItem> {
   final TextEditingController _controller = TextEditingController();
 
-  void _cadastrarItem(String nomeProduto, ComprasEntity? compraAtual) {
-    if (nomeProduto.trim().isEmpty || compraAtual == null) return;
-    if (compraAtual.id == null) return;
-
+  void _cadastrarItem(String nomeProduto) {
     final novoItem = ItemEntity(
       id: -1,
-      compraId: compraAtual.id!,
+      compraId: -1,
       produto: ProdutoEntity(
         id: -1,
         nome: nomeProduto.trim(),
@@ -35,16 +31,14 @@ class _AdicionarItemState extends State<AdicionarItem> {
       comprado: false,
     );
 
-    context.read<ComprasBloc>().add(AtualizarCompra(item: novoItem));
+    context.read<ItemBloc>().add(CriarItem(item: novoItem));
     _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ComprasBloc, ComprasState>(
+    return BlocBuilder<ItemBloc, ItemState>(
       builder: (context, compraState) {
-        final compraAtual = compraState.compra;
-
         return Card(
           elevation: 2,
           margin: const EdgeInsets.symmetric(horizontal: 24),
@@ -84,8 +78,7 @@ class _AdicionarItemState extends State<AdicionarItem> {
                     ),
                     TextField(
                       controller: _controller,
-                      onSubmitted: (value) =>
-                          _cadastrarItem(value, compraAtual),
+                      onSubmitted: (value) => _cadastrarItem(value),
                       decoration: InputDecoration(
                         hintText: 'Digite o nome do produto e pressione Enter',
                         contentPadding: const EdgeInsets.symmetric(

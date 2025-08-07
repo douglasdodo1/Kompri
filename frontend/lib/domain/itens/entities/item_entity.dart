@@ -46,4 +46,9 @@ class ItemEntity {
       comprado: comprado ?? this.comprado,
     );
   }
+
+  @override
+  String toString() {
+    return 'ItemEntity{id: $id, compraId: $compraId, produto: $produto, quantidade: $quantidade, valor: $valor, comprado: $comprado}';
+  }
 }

@@ -27,7 +27,6 @@ class AtualizarCompra extends ComprasEvent {
   final String? valorTotal;
   final String? valorEstimado;
   final int? qtdItens;
-  final ItemEntity? item;
   final InstituicaoEntity? instituicao;
 
   AtualizarCompra({
@@ -35,7 +34,6 @@ class AtualizarCompra extends ComprasEvent {
     this.valorTotal,
     this.valorEstimado,
     this.qtdItens,
-    this.item,
     this.instituicao,
   });
 }
