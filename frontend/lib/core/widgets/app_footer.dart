@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/presentation/compras/pages/compras_page.dart';
 
 class AppFooter extends StatefulWidget {
   const AppFooter({super.key});
@@ -12,13 +13,22 @@ class _AppFooterState extends State<AppFooter> {
 
   final List<_FooterItem> items = const [
     _FooterItem(icon: Icons.home, label: 'Início'),
-    _FooterItem(icon: Icons.search, label: 'Buscar'),
+    _FooterItem(icon: Icons.view_week, label: 'código de barras'),
     _FooterItem(icon: Icons.shopping_cart, label: 'Carrinho'),
     _FooterItem(icon: Icons.history, label: 'Histórico'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    void redirect() {
+      if (selectedIndex == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ComprasPage()),
+        );
+      }
+    }
+
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -38,6 +48,7 @@ class _AppFooterState extends State<AppFooter> {
                 setState(() {
                   selectedIndex = index;
                 });
+                redirect();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: isSelected ? Colors.indigo[50] : Colors.white,

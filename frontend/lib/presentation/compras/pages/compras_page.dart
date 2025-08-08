@@ -62,7 +62,7 @@ class _ComprasViewState extends State<_ComprasView> {
             child: ListView(
               children: <Widget>[
                 SizedBox(height: 24.h),
-                const AnaliseGastos(),
+                AnaliseGastos(),
                 SizedBox(height: 15.h),
                 AdicionarItem(),
                 SizedBox(height: 15.h),

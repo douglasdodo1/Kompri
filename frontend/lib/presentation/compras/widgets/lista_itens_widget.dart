@@ -6,7 +6,7 @@ import 'package:frontend/core/utils/format_to_cash.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
-import 'package:frontend/presentation/compras/widgets/editable_chip_widget.dart';
+import 'package:frontend/core/widgets/editable_chip_widget.dart';
 import 'package:frontend/presentation/compras/widgets/lista_itens_vazia_widget.dart';
 
 class ListaItens extends StatefulWidget {

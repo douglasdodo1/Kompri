@@ -64,7 +64,9 @@ class _AnaliseGastosState extends State<AnaliseGastos> {
             state.compra?.itens
                 .fold(
                   0.00,
-                  (total, item) => item.comprado == true ? total + (item.quantidade * item.valor) : total,
+                  (total, item) => item.comprado == true
+                      ? total + (item.quantidade * item.valor)
+                      : total,
                 )
                 .toStringAsFixed(2) ??
             "0.00";
