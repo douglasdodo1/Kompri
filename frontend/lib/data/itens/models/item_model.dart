@@ -2,7 +2,7 @@ import 'package:frontend/data/produtos/models/produto_model.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
 
 class ItemModel {
-  final int id;
+  final String id;
   final int compraId;
   final ProdutoModel produto;
   final int quantidade;

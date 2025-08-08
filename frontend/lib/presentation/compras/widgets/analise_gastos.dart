@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/core/utils/calcular_valor_progresso.dart';
 import 'package:frontend/core/utils/diferenca.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
@@ -11,14 +12,14 @@ import 'package:frontend/core/utils/format_to_cash.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:intl/intl.dart';
 
-class SpentProgressWidget extends StatefulWidget {
-  const SpentProgressWidget({super.key});
+class AnaliseGastos extends StatefulWidget {
+  const AnaliseGastos({super.key});
 
   @override
-  State<SpentProgressWidget> createState() => _SpentProgressWidgetState();
+  State<AnaliseGastos> createState() => _AnaliseGastosState();
 }
 
-class _SpentProgressWidgetState extends State<SpentProgressWidget> {
+class _AnaliseGastosState extends State<AnaliseGastos> {
   final TextEditingController _controller = TextEditingController();
 
   bool isEditing = false;
@@ -59,6 +60,19 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
       builder: (context, state) {
         final ComprasEntity? compra = state.compra;
         final String valorEstimado = compra?.valorEstimado ?? '0.00';
+        final String valorGastoCompra =
+            state.compra?.itens
+                .fold(
+                  0.00,
+                  (total, item) => item.comprado == true ? total + (item.quantidade * item.valor) : total,
+                )
+                .toStringAsFixed(2) ??
+            "0.00";
+
+        final String valorRestante = calcularDiferenca(
+          valorEstimado,
+          valorGastoCompra,
+        );
 
         return GestureDetector(
           onTapDown: (_) => FocusScope.of(context).unfocus(),
@@ -69,7 +83,6 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
               height: 200.h,
               width: 400.w,
               padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 24.w),
-              margin: EdgeInsets.symmetric(horizontal: 20.w),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
@@ -137,15 +150,19 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                           ),
                           SizedBox(
                             width: 150.w,
-                            child: Text(
-                              'R\$ ${compra?.valorTotal ?? '0.000'}',
-                              style: TextStyle(
-                                fontSize: 35.sp,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontFeatures: const [
-                                  FontFeature.tabularFigures(),
-                                ],
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'R\$ $valorGastoCompra',
+                                style: TextStyle(
+                                  fontSize: 35.sp,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -163,10 +180,12 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                             ),
                           ),
                           Text(
-                            'R\$ ${calcularDiferenca(compra?.valorEstimado, compra?.valorTotal)}',
+                            'R\$ $valorRestante',
                             style: TextStyle(
                               fontSize: 20.sp,
-                              color: const Color(0xFF6EE7B7),
+                              color: (double.tryParse(valorRestante) ?? 0.0) > 0
+                                  ? Color(0xFF6EE7B7)
+                                  : Colors.red,
                               fontWeight: FontWeight.w500,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
@@ -186,12 +205,22 @@ class _SpentProgressWidgetState extends State<SpentProgressWidget> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(6),
-                      child: LinearProgressIndicator(
-                        value: 0.6,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          const Color.fromARGB(255, 15, 19, 22),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween<double>(
+                          begin: 0,
+                          end: calcularValorProgresso(
+                            valorGastoCompra,
+                            valorEstimado,
+                          ),
                         ),
-                        backgroundColor: Colors.transparent,
+                        duration: Duration(milliseconds: 500),
+                        builder: (context, value, child) {
+                          return LinearProgressIndicator(
+                            value: value.clamp(0.0, 1.0),
+                            backgroundColor: Colors.grey[300],
+                            color: Color.fromARGB(255, 15, 19, 22),
+                          );
+                        },
                       ),
                     ),
                   ),

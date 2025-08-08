@@ -6,14 +6,28 @@ class ItemUsecase {
 
   ItemUsecase(this.itemRepository);
 
-  Future<void> criarItem(ItemEntity item) => itemRepository.criarItem(item);
+  Future<ItemEntity> criarItem(ItemEntity item) =>
+      itemRepository.criarItem(item);
 
   Future<List<ItemEntity>> buscarItens() => itemRepository.buscarItens();
 
   Future<ItemEntity> buscarItem(int id) => itemRepository.buscarItem(id);
 
-  Future<void> atualizarItem(ItemEntity item) =>
-      itemRepository.atualizarItem(item);
+  Future<ItemEntity> atualizarItem(
+    ItemEntity item,
+    String? marca,
+    String? categoria,
+    double? valor,
+    int? quantidade,
+    bool? comprado,
+  ) => itemRepository.atualizarItem(
+    item,
+    marca,
+    categoria,
+    valor,
+    quantidade,
+    comprado,
+  );
 
   Future<void> deletarItem(int id) => itemRepository.deletarItem(id);
 }

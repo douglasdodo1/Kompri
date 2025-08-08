@@ -46,17 +46,20 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     final compraAtual = state.compra;
     if (compraAtual == null) return;
 
-    print('compra atual: $compraAtual');
+    print("ANALISANDO O BLOC");
+    print(event.item);
+    print(event.valorEstimado);
 
     final compraSalva = await usecase.atualizarCompra(
-      event.status ?? compraAtual.status,
-      event.valorTotal ?? compraAtual.valorTotal,
-      event.valorEstimado ?? compraAtual.valorEstimado,
-      event.qtdItens ?? compraAtual.qtdItens,
-      event.instituicao ?? compraAtual.instituicao,
+      event.status,
+      event.valorTotal,
+      event.valorEstimado,
+      event.qtdItens,
+      event.item,
+      event.instituicao,
     );
 
-    emit(state.copyWith(compra: compraSalva));
+    emit(state.copyWith(compra: compraSalva, sucesso: true));
   }
 
   Future<void> _buscarCompraRecente(

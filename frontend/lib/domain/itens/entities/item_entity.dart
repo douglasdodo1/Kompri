@@ -2,7 +2,7 @@ import 'package:frontend/data/itens/models/item_model.dart';
 import 'package:frontend/domain/produtos/entities/produto_entity.dart';
 
 class ItemEntity {
-  final int id;
+  final String id;
   final int compraId;
   final ProdutoEntity produto;
   final int quantidade;
@@ -30,7 +30,7 @@ class ItemEntity {
   }
 
   ItemEntity copyWith({
-    int? id,
+    String? id,
     int? compraId,
     ProdutoEntity? produto,
     int? quantidade,

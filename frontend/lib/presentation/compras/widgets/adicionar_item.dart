@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
 import 'package:frontend/domain/produtos/entities/produto_entity.dart';
-import 'package:frontend/presentation/itens/bloc/item_bloc.dart';
-import 'package:frontend/presentation/itens/bloc/item_event.dart';
-import 'package:frontend/presentation/itens/bloc/item_state.dart';
+import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
+import 'package:frontend/presentation/compras/bloc/compras_event.dart';
+import 'package:frontend/presentation/compras/bloc/compras_state.dart';
 
 class AdicionarItem extends StatefulWidget {
   const AdicionarItem({super.key});
@@ -18,7 +18,7 @@ class _AdicionarItemState extends State<AdicionarItem> {
 
   void _cadastrarItem(String nomeProduto) {
     final novoItem = ItemEntity(
-      id: -1,
+      id: "-1",
       compraId: -1,
       produto: ProdutoEntity(
         id: -1,
@@ -31,17 +31,16 @@ class _AdicionarItemState extends State<AdicionarItem> {
       comprado: false,
     );
 
-    context.read<ItemBloc>().add(CriarItem(item: novoItem));
+    context.read<ComprasBloc>().add(AtualizarCompra(item: novoItem));
     _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemBloc, ItemState>(
+    return BlocBuilder<ComprasBloc, ComprasState>(
       builder: (context, compraState) {
         return Card(
           elevation: 2,
-          margin: const EdgeInsets.symmetric(horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

@@ -12,6 +12,7 @@ abstract class ComprasRepository {
     String? valorTotal,
     String? valorEstimado,
     int? qtdItens,
+    ItemEntity? item,
     InstituicaoEntity? instituicao,
   );
 }

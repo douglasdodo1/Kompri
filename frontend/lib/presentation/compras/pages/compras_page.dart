@@ -4,13 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/widgets/app_footer.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
-import 'package:frontend/presentation/compras/widgets/escolher_instituicao.dart';
-import 'package:frontend/presentation/compras/widgets/spent_progress_widget.dart';
-import 'package:frontend/presentation/compras/widgets/welcome_widget.dart';
-import 'package:frontend/presentation/itens/bloc/item_bloc.dart';
-import 'package:frontend/presentation/itens/bloc/item_event.dart';
-import 'package:frontend/presentation/itens/widgets/adicionar_item.dart';
-import 'package:frontend/presentation/itens/widgets/lista_itens_widget.dart';
+import 'package:frontend/presentation/compras/widgets/analise_gastos.dart';
+import 'package:frontend/presentation/compras/widgets/boas_vindas.dart';
+import 'package:frontend/presentation/compras/widgets/adicionar_item.dart';
+import 'package:frontend/presentation/compras/widgets/lista_itens_widget.dart';
 import 'package:frontend/services/injection_container.dart';
 
 class ComprasPage extends StatelessWidget {
@@ -18,11 +15,8 @@ class ComprasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => sl<ComprasBloc>()..add(CarregarCompra())),
-        BlocProvider(create: (_) => sl<ItemBloc>()..add(BuscarItens())),
-      ],
+    return BlocProvider(
+      create: (_) => sl<ComprasBloc>()..add(CarregarCompra()),
       child: const _ComprasView(),
     );
   }
@@ -47,7 +41,7 @@ class _ComprasViewState extends State<_ComprasView> {
         builder: (dialogContext) {
           return BlocProvider.value(
             value: context.read<ComprasBloc>(),
-            child: const WelcomeWidget(),
+            child: const BoasVindas(),
           );
         },
       );
@@ -63,15 +57,18 @@ class _ComprasViewState extends State<_ComprasView> {
           title: const Text("Kompri - Compras"),
         ),
         body: Center(
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height: 24.h),
-              const SpentProgressWidget(),
-              SizedBox(height: 15.h),
-              AdicionarItem(),
-              SizedBox(height: 2.h),
-              ListaItens(),
-            ],
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: ListView(
+              children: <Widget>[
+                SizedBox(height: 24.h),
+                const AnaliseGastos(),
+                SizedBox(height: 15.h),
+                AdicionarItem(),
+                SizedBox(height: 15.h),
+                ListaItens(),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: AppFooter(),

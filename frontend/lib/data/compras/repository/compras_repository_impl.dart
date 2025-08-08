@@ -6,8 +6,11 @@ import 'package:frontend/domain/compras/repositories/compras_repository.dart';
 import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
 import 'package:frontend/services/shared_preferences_service.dart';
+import 'package:uuid/uuid.dart';
 
 class ComprasRepositoryImpl implements ComprasRepository {
+  final uuid = Uuid();
+
   @override
   Future<void> criarCompra(ComprasEntity compra) async {
     final prefs = await SharedPreferencesService.getInstance();
@@ -57,6 +60,7 @@ class ComprasRepositoryImpl implements ComprasRepository {
     String? valorTotal,
     String? valorEstimado,
     int? qtdItens,
+    ItemEntity? item,
     InstituicaoEntity? instituicao,
   ) async {
     final prefs = await SharedPreferencesService.getInstance();
@@ -67,20 +71,41 @@ class ComprasRepositoryImpl implements ComprasRepository {
     }
 
     final Map<String, dynamic> compraJson = jsonDecode(compraJsonString);
+    print("COMPRA JSON: $compraJson");
 
     final compraSalva = ComprasModel.fromJson(compraJson).toEntity();
+
+    valorEstimado = valorEstimado == null
+        ? compraSalva.valorEstimado
+        : virgulaParaPonto(valorEstimado);
+
+    final List<ItemEntity> listaItensAtual = [...compraSalva.itens];
+    final List<ItemEntity> listaItensAtualizada = [...listaItensAtual];
+
+    if (item != null) {
+      int index = listaItensAtualizada.indexWhere((i) => i.id == item?.id);
+
+      if (index != -1) {
+        listaItensAtualizada[index] = item;
+      } else {
+        item = item.copyWith(compraId: compraSalva.id, id: uuid.v4());
+
+        listaItensAtualizada.add(item);
+      }
+    }
 
     final compraAtualizada = compraSalva.copyWith(
       status: status,
       valorTotal: valorTotal,
       valorEstimado: valorEstimado,
       qtdItens: qtdItens,
+      itens: listaItensAtualizada,
       instituicao: instituicao,
     );
 
     final compraModel = compraAtualizada.toModel();
-    await prefs.saveData('compra', jsonEncode(compraModel.toJson()));
 
+    await prefs.saveData('compra', jsonEncode(compraModel.toJson()));
     return compraAtualizada;
   }
 }

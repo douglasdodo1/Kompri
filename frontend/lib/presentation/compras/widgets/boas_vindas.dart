@@ -10,14 +10,14 @@ import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class WelcomeWidget extends StatefulWidget {
-  const WelcomeWidget({super.key});
+class BoasVindas extends StatefulWidget {
+  const BoasVindas({super.key});
 
   @override
-  State<WelcomeWidget> createState() => WelcomeWidgetState();
+  State<BoasVindas> createState() => BoasVindasState();
 }
 
-class WelcomeWidgetState extends State<WelcomeWidget> {
+class BoasVindasState extends State<BoasVindas> {
   final TextEditingController _controller = TextEditingController();
 
   String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
@@ -105,7 +105,6 @@ class WelcomeWidgetState extends State<WelcomeWidget> {
                   instituicao: InstituicaoEntity(id: 1, nome: ""),
                 );
                 Navigator.pop(context);
-                print("compra: $compra");
                 context.read<ComprasBloc>().add(CriarCompra(compra));
               },
 
