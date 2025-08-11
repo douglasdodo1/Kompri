@@ -20,6 +20,7 @@ class CompraUsecase {
     int? qtdItens,
     ItemEntity? item,
     InstituicaoEntity? instituicao,
+    String? deletarItemId,
   ) async => repository.atualizarCompra(
     status,
     valorTotal,
@@ -27,7 +28,9 @@ class CompraUsecase {
     qtdItens,
     item,
     instituicao,
+    deletarItemId,
   );
 
-  Future<void> buscarCompras() async => repository.buscarCompras();
+  Future<List<ComprasEntity>> buscarCompras() async =>
+      repository.buscarCompras();
 }

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/core/widgets/app_footer.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/widgets/analise_gastos.dart';
 import 'package:frontend/presentation/compras/widgets/boas_vindas.dart';
 import 'package:frontend/presentation/compras/widgets/adicionar_item.dart';
 import 'package:frontend/presentation/compras/widgets/lista_itens_widget.dart';
-import 'package:frontend/services/injection_container.dart';
 
-class ComprasPage extends StatelessWidget {
-  const ComprasPage({super.key});
+class CompraPage extends StatelessWidget {
+  const CompraPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<ComprasBloc>()..add(CarregarCompra()),
-      child: const _ComprasView(),
-    );
+    // Adiciona o evento diretamente no build usando o bloc do contexto
+    context.read<ComprasBloc>().add(CarregarCompra());
+
+    return const _ComprasView();
   }
 }
 
@@ -58,7 +56,7 @@ class _ComprasViewState extends State<_ComprasView> {
         ),
         body: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: ListView(
               children: <Widget>[
                 SizedBox(height: 24.h),
@@ -71,7 +69,6 @@ class _ComprasViewState extends State<_ComprasView> {
             ),
           ),
         ),
-        bottomNavigationBar: AppFooter(),
       ),
     );
   }

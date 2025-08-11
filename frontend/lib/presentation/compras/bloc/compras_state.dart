@@ -1,7 +1,7 @@
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 
 class ComprasState {
-  final List<ComprasEntity> comprasRecentes;
+  final List<ComprasEntity> listaCompras;
   final bool carregando;
   final ComprasEntity? compra;
   final String tendencia;
@@ -9,7 +9,7 @@ class ComprasState {
   final bool sucesso;
 
   ComprasState({
-    required this.comprasRecentes,
+    required this.listaCompras,
     required this.carregando,
     required this.compra,
     required this.tendencia,
@@ -19,7 +19,7 @@ class ComprasState {
 
   factory ComprasState.inicial() => ComprasState(
     compra: null,
-    comprasRecentes: [],
+    listaCompras: [],
     carregando: false,
     tendencia: "",
     erro: null,
@@ -27,7 +27,7 @@ class ComprasState {
   );
 
   ComprasState copyWith({
-    List<ComprasEntity>? comprasRecentes,
+    List<ComprasEntity>? listaCompras,
     bool? carregando,
     ComprasEntity? compra,
     String? valorEstimado,
@@ -37,7 +37,7 @@ class ComprasState {
   }) {
     return ComprasState(
       compra: compra ?? this.compra,
-      comprasRecentes: comprasRecentes ?? this.comprasRecentes,
+      listaCompras: listaCompras ?? this.listaCompras,
       carregando: carregando ?? this.carregando,
       tendencia: tendencia ?? this.tendencia,
       erro: erro,

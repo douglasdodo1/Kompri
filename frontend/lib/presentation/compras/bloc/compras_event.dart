@@ -17,17 +17,13 @@ class CarregarCompra extends ComprasEvent {
   CarregarCompra();
 }
 
-class AtualizarValorEstimado extends ComprasEvent {
-  final String valorEstimado;
-  AtualizarValorEstimado(this.valorEstimado);
-}
-
 class AtualizarCompra extends ComprasEvent {
   final String? status;
   final String? valorTotal;
   final String? valorEstimado;
   final int? qtdItens;
   final ItemEntity? item;
+  final String? deletarItemId;
 
   final InstituicaoEntity? instituicao;
 
@@ -38,9 +34,14 @@ class AtualizarCompra extends ComprasEvent {
     this.qtdItens,
     this.item,
     this.instituicao,
+    this.deletarItemId,
   });
 }
 
 class BuscarCompraRecente extends ComprasEvent {
   BuscarCompraRecente();
+}
+
+class BuscarCompras extends ComprasEvent {
+  BuscarCompras();
 }

@@ -4,6 +4,7 @@ import 'package:frontend/domain/compras/entities/compras_entity.dart';
 
 class ComprasModel {
   final int id;
+  final String data;
   final String status;
   final double valorTotal;
   final double valorEstimado;
@@ -14,6 +15,7 @@ class ComprasModel {
 
   ComprasModel(
     this.id,
+    this.data,
     this.status,
     this.valorTotal,
     this.valorEstimado,
@@ -26,6 +28,7 @@ class ComprasModel {
   factory ComprasModel.fromJson(Map<String, dynamic> json) {
     return ComprasModel(
       json['id'],
+      json['data'],
       json['status'],
       json['valorTotal'],
       json['valorEstimado'],
@@ -39,6 +42,7 @@ class ComprasModel {
   ComprasEntity toEntity() {
     return ComprasEntity(
       id: id,
+      data: data,
       status: status,
       valorTotal: valorTotal.toStringAsFixed(2),
       valorEstimado: valorEstimado.toStringAsFixed(2),
@@ -51,6 +55,7 @@ class ComprasModel {
 
   Map toJson() => <String, dynamic>{
     'id': id,
+    'data': data,
     'status': status,
     'valorTotal': valorTotal,
     'valorEstimado': valorEstimado,
@@ -62,6 +67,6 @@ class ComprasModel {
 
   @override
   String toString() {
-    return 'ComprasModel(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: $itens, instituicao: $instituicao)';
+    return 'ComprasModel(id: $id, data: $data, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: $itens, instituicao: $instituicao)';
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:frontend/core/mock/compras_mock.dart';
 import 'package:frontend/core/utils/virgula_para_ponto.dart';
 import 'package:frontend/data/compras/models/compras_model.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
@@ -30,6 +31,7 @@ class ComprasRepositoryImpl implements ComprasRepository {
     if (jsonString == null) {
       return ComprasEntity(
         id: -1,
+        data: '',
         status: '',
         valorTotal: '0.00',
         valorEstimado: '0.00',
@@ -47,7 +49,10 @@ class ComprasRepositoryImpl implements ComprasRepository {
   }
 
   @override
-  Future<void> buscarCompras() async {}
+  Future<List<ComprasEntity>> buscarCompras() async {
+    print("BUSCANDO COMPRAS MOCK");
+    return comprasMock;
+  }
 
   @override
   Future<void> buscarComprasRecentes() {
@@ -62,6 +67,7 @@ class ComprasRepositoryImpl implements ComprasRepository {
     int? qtdItens,
     ItemEntity? item,
     InstituicaoEntity? instituicao,
+    String? deletarItemId,
   ) async {
     final prefs = await SharedPreferencesService.getInstance();
     final compraJsonString = prefs.getData('compra');
@@ -81,6 +87,10 @@ class ComprasRepositoryImpl implements ComprasRepository {
 
     final List<ItemEntity> listaItensAtual = [...compraSalva.itens];
     final List<ItemEntity> listaItensAtualizada = [...listaItensAtual];
+
+    if (deletarItemId != null) {
+      listaItensAtualizada.removeWhere((i) => i.id == deletarItemId);
+    }
 
     if (item != null) {
       int index = listaItensAtualizada.indexWhere((i) => i.id == item?.id);

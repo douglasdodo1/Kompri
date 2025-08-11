@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/presentation/compras/pages/compras_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // import bloc
+import 'package:frontend/core/pagina_base.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:frontend/services/injection_container.dart' as di;
+import 'package:frontend/presentation/compras/bloc/compras_bloc.dart'; // import bloc
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,12 +23,15 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
-          title: 'Kompri',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        return BlocProvider<ComprasBloc>(
+          create: (_) => di.sl<ComprasBloc>(),
+          child: MaterialApp(
+            title: 'Kompri',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            ),
+            home: const PaginaBase(),
           ),
-          home: const ComprasPage(),
         );
       },
     );

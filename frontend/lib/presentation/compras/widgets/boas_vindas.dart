@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/utils/format_to_cash.dart';
+import 'package:frontend/core/utils/nome_do_mes.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
@@ -20,7 +21,7 @@ class BoasVindas extends StatefulWidget {
 class BoasVindasState extends State<BoasVindas> {
   final TextEditingController _controller = TextEditingController();
 
-  String mes = DateFormat.MMMM('pt_BR').format(DateTime.now());
+  String data = DateFormat('MM/yyyy', 'pt_BR').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -60,7 +61,9 @@ class BoasVindasState extends State<BoasVindas> {
 
             Align(
               alignment: Alignment.center,
-              child: Text("Orçamento para $mes de ${DateTime.now().year}"),
+              child: Text(
+                "Orçamento para ${nomeDoMes(data.substring(0, 2))} de ${data.substring(3)}",
+              ),
             ),
 
             SizedBox(
@@ -96,6 +99,7 @@ class BoasVindasState extends State<BoasVindas> {
 
                 final compra = ComprasEntity(
                   id: 0,
+                  data: data,
                   status: "aberta",
                   valorTotal: "0.00",
                   valorEstimado: valorEstimado,

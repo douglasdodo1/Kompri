@@ -181,9 +181,9 @@ class _ListaItensState extends State<ListaItens> {
                                   size: 18.sp,
                                 ),
                                 onPressed: () {
-                                  //context.read<ComprasBloc>().add(
-                                  //DeletarItem(itemId: item.id),
-                                  //);
+                                  context.read<ComprasBloc>().add(
+                                    AtualizarCompra(deletarItemId: item.id),
+                                  );
                                 },
                               ),
                             ],

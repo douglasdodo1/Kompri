@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/compras/pages/compras_page.dart';
 
 class AppFooter extends StatefulWidget {
-  const AppFooter({super.key});
+  final ValueChanged<int> onItemTapped;
+  final int selectedIndex;
+  const AppFooter({
+    super.key,
+    required this.onItemTapped,
+    required this.selectedIndex,
+  });
 
   @override
   State<AppFooter> createState() => _AppFooterState();
 }
 
 class _AppFooterState extends State<AppFooter> {
-  int selectedIndex = 0;
-
   final List<_FooterItem> items = const [
     _FooterItem(icon: Icons.home, label: 'Início'),
     _FooterItem(icon: Icons.view_week, label: 'código de barras'),
@@ -20,15 +23,6 @@ class _AppFooterState extends State<AppFooter> {
 
   @override
   Widget build(BuildContext context) {
-    void redirect() {
-      if (selectedIndex == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ComprasPage()),
-        );
-      }
-    }
-
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -40,15 +34,12 @@ class _AppFooterState extends State<AppFooter> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(items.length, (index) {
           final item = items[index];
-          final isSelected = selectedIndex == index;
+          final isSelected = widget.selectedIndex == index;
 
           return Expanded(
             child: ElevatedButton(
               onPressed: () {
-                setState(() {
-                  selectedIndex = index;
-                });
-                redirect();
+                widget.onItemTapped(index);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: isSelected ? Colors.indigo[50] : Colors.white,

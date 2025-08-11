@@ -4,7 +4,7 @@ import 'package:frontend/domain/itens/entities/item_entity.dart';
 
 abstract class ComprasRepository {
   Future<void> buscarComprasRecentes();
-  Future<void> buscarCompras();
+  Future<List<ComprasEntity>> buscarCompras();
   Future<void> criarCompra(ComprasEntity compra);
   Future<ComprasEntity> buscarCompraRecente();
   Future<ComprasEntity> atualizarCompra(
@@ -14,5 +14,6 @@ abstract class ComprasRepository {
     int? qtdItens,
     ItemEntity? item,
     InstituicaoEntity? instituicao,
+    String? deletarItemId,
   );
 }

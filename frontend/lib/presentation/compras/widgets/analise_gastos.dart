@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/utils/calcular_valor_progresso.dart';
 import 'package:frontend/core/utils/diferenca.dart';
+import 'package:frontend/core/utils/ponto_para_virgula.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
@@ -231,7 +232,7 @@ class _AnaliseGastosState extends State<AnaliseGastos> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '56% utilizado',
+                        '${pontoParaVirgula((calcularValorProgresso(valorGastoCompra, valorEstimado) * 100).toStringAsFixed(2))}%',
                         style: TextStyle(color: Colors.white),
                       ),
                       if (!isEditing)

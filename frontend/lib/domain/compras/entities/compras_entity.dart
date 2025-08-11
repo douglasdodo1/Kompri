@@ -4,6 +4,7 @@ import 'package:frontend/domain/itens/entities/item_entity.dart';
 
 class ComprasEntity {
   final int? id;
+  final String data;
   final String status;
   final String valorTotal;
   final String valorEstimado;
@@ -14,6 +15,7 @@ class ComprasEntity {
 
   ComprasEntity({
     required this.id,
+    required this.data,
     required this.status,
     required this.valorTotal,
     required this.valorEstimado,
@@ -26,6 +28,7 @@ class ComprasEntity {
   ComprasModel toModel() {
     return ComprasModel(
       id ?? -1,
+      data,
       status,
       double.tryParse(valorTotal) ?? 0.00,
       double.tryParse(valorEstimado) ?? 0.00,
@@ -38,6 +41,7 @@ class ComprasEntity {
 
   ComprasEntity copyWith({
     int? id,
+    String? data,
     String? status,
     String? valorTotal,
     String? valorEstimado,
@@ -48,6 +52,7 @@ class ComprasEntity {
   }) {
     return ComprasEntity(
       id: id ?? this.id,
+      data: data ?? this.data,
       status: status ?? this.status,
       valorTotal: valorTotal ?? this.valorTotal,
       valorEstimado: valorEstimado ?? this.valorEstimado,
@@ -60,6 +65,6 @@ class ComprasEntity {
 
   @override
   String toString() {
-    return 'ComprasEntity(id: $id, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: ${itens.toString()}, instituicao: $instituicao)';
+    return 'ComprasEntity(id: $id, data: $data, status: $status, valorTotal: $valorTotal, valorEstimado: $valorEstimado, qtdItens: $qtdItens, usuarioCpf: $usuarioCpf, itens: ${itens.toString()}, instituicao: $instituicao)';
   }
 }
