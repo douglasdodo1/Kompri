@@ -16,8 +16,7 @@ class AppFooter extends StatefulWidget {
 class _AppFooterState extends State<AppFooter> {
   final List<_FooterItem> items = const [
     _FooterItem(icon: Icons.home, label: 'Início'),
-    _FooterItem(icon: Icons.view_week, label: 'código de barras'),
-    _FooterItem(icon: Icons.shopping_cart, label: 'Carrinho'),
+    _FooterItem(icon: Icons.shopping_bag, label: 'Meus produtos'),
     _FooterItem(icon: Icons.history, label: 'Histórico'),
   ];
 

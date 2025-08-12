@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/core/utils/calcular_economia.dart';
 import 'package:frontend/core/utils/nome_do_mes.dart';
-import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
-import 'package:intl/intl.dart';
 
 class ListaCompras extends StatefulWidget {
   const ListaCompras({super.key});
@@ -18,14 +15,6 @@ class ListaCompras extends StatefulWidget {
 
 class _ListaComprasState extends State<ListaCompras> {
   late final ComprasBloc bloc;
-
-  int proximoItem(int indexAtual, int tamanho) {
-    if (indexAtual < tamanho - 1) {
-      return indexAtual + 1;
-    } else {
-      return indexAtual;
-    }
-  }
 
   @override
   void initState() {
@@ -38,27 +27,18 @@ class _ListaComprasState extends State<ListaCompras> {
   Widget build(BuildContext context) {
     return BlocBuilder<ComprasBloc, ComprasState>(
       builder: (context, state) {
-        final List<ComprasEntity> listaOrdenada =
-            List.from(bloc.state.listaCompras)..sort((a, b) {
-              final dateA = DateFormat('MM/yyyy').parse(a.data);
-              final dateB = DateFormat('MM/yyyy').parse(b.data);
-              return dateB.compareTo(dateA);
-            });
-
         return SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             spacing: 5.h,
-            children: listaOrdenada.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final proximo =
-                  listaOrdenada[proximoItem(index, listaOrdenada.length)];
-              final economia = double.parse(
-                calcularEconomia(item.valorTotal, proximo.valorTotal),
-              );
-              final economizou = economia < 0;
-              final porcentagemLucro = economia.abs().toStringAsFixed(2);
+            children: List.generate(state.listaCompras.length, (index) {
+              final item = state.listaCompras[index];
+              final valor =
+                  double.tryParse(
+                    state.economiaPorMes[item.id.toString()] ?? '0',
+                  ) ??
+                  0;
+              final bool economizou = valor < 0;
 
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -72,6 +52,7 @@ class _ListaComprasState extends State<ListaCompras> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 5.h,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,7 +80,7 @@ class _ListaComprasState extends State<ListaCompras> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          "$porcentagemLucro%",
+                                          "${state.porcentagemPorMesLucro[item.id.toString()]}%",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16.sp,
@@ -130,7 +111,7 @@ class _ListaComprasState extends State<ListaCompras> {
                           children: [
                             Flexible(
                               child: Text(
-                                "Instituição: ${item.instituicao.nome}",
+                                item.instituicao.nome,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12.sp,
@@ -152,8 +133,8 @@ class _ListaComprasState extends State<ListaCompras> {
 
                         Text(
                           economizou
-                              ? "Você economizou $porcentagemLucro% em relação ao mês anterior"
-                              : "Você gastou $porcentagemLucro% a mais em relação ao mês anterior",
+                              ? "Você economizou ${state.economiaPorMes[item.id.toString()]?.substring(1)} em relação ao mês anterior"
+                              : "Você gastou ${state.economiaPorMes[item.id.toString()]} a mais em relação ao mês anterior",
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 12.sp,
@@ -186,7 +167,7 @@ class _ListaComprasState extends State<ListaCompras> {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ),
         );
       },

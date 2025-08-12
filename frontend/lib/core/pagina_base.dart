@@ -15,7 +15,6 @@ class _PaginaBaseState extends State<PaginaBase> {
 
   final List<Widget> pages = [
     CompraPage(),
-    Center(child: Text('Código de barras')),
     Center(child: Text('Carrinho')),
     CompraHistoricoPage(),
   ];

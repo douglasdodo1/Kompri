@@ -52,17 +52,17 @@ class _AnaliseGastosState extends State<AnaliseGastos> {
 
     return BlocConsumer<ComprasBloc, ComprasState>(
       listener: (context, state) {
-        final compra = state.compra;
+        final compra = state.compraAtual;
         if (compra != null) {
           final val = compra.valorEstimado;
           _controller.text = val.replaceAll(RegExp(r'[^0-9]'), '');
         }
       },
       builder: (context, state) {
-        final ComprasEntity? compra = state.compra;
+        final ComprasEntity? compra = state.compraAtual;
         final String valorEstimado = compra?.valorEstimado ?? '0.00';
         final String valorGastoCompra =
-            state.compra?.itens
+            state.compraAtual?.itens
                 .fold(
                   0.00,
                   (total, item) => item.comprado == true

@@ -1,4 +1,7 @@
-String calcularEconomia(String valorTotalAtual, String valorTotalAnterior) {
+String calcularEconomiaPercentual(
+  String valorTotalAtual,
+  String valorTotalAnterior,
+) {
   final double totalAtual =
       double.tryParse(valorTotalAtual.replaceAll(',', '.')) ?? 0.0;
   final double totalAnterior =

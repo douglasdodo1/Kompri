@@ -59,7 +59,7 @@ class _ListaItensState extends State<ListaItens> {
   Widget build(BuildContext context) {
     return BlocBuilder<ComprasBloc, ComprasState>(
       builder: (context, state) {
-        final items = state.compra?.itens ?? [];
+        final items = state.compraAtual?.itens ?? [];
 
         if (items.isEmpty) {
           return const ListaItensVaziaWidget();

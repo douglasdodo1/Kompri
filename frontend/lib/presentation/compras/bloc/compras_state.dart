@@ -3,7 +3,10 @@ import 'package:frontend/domain/compras/entities/compras_entity.dart';
 class ComprasState {
   final List<ComprasEntity> listaCompras;
   final bool carregando;
-  final ComprasEntity? compra;
+  final ComprasEntity? compraAtual;
+  final ComprasEntity? proximaCompra;
+  final Map<String, String> economiaPorMes;
+  final Map<String, String> porcentagemPorMesLucro;
   final String tendencia;
   final String? erro;
   final bool sucesso;
@@ -11,15 +14,21 @@ class ComprasState {
   ComprasState({
     required this.listaCompras,
     required this.carregando,
-    required this.compra,
+    required this.compraAtual,
+    required this.proximaCompra,
+    required this.economiaPorMes,
+    required this.porcentagemPorMesLucro,
     required this.tendencia,
     required this.erro,
     required this.sucesso,
   });
 
   factory ComprasState.inicial() => ComprasState(
-    compra: null,
+    compraAtual: null,
     listaCompras: [],
+    proximaCompra: null,
+    economiaPorMes: {},
+    porcentagemPorMesLucro: {},
     carregando: false,
     tendencia: "",
     erro: null,
@@ -31,17 +40,23 @@ class ComprasState {
     bool? carregando,
     ComprasEntity? compra,
     String? valorEstimado,
+    Map<String, String>? economiaPorMes,
+    Map<String, String>? porcentagemPorMesLucro,
     String? tendencia,
     String? erro,
     bool? sucesso,
   }) {
     return ComprasState(
-      compra: compra ?? this.compra,
+      compraAtual: compra ?? compraAtual,
       listaCompras: listaCompras ?? this.listaCompras,
       carregando: carregando ?? this.carregando,
       tendencia: tendencia ?? this.tendencia,
       erro: erro,
       sucesso: sucesso ?? this.sucesso,
+      porcentagemPorMesLucro:
+          porcentagemPorMesLucro ?? this.porcentagemPorMesLucro,
+      proximaCompra: null,
+      economiaPorMes: economiaPorMes ?? this.economiaPorMes,
     );
   }
 }

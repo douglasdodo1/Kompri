@@ -1,4 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/core/utils/calcular_economia_percentual.dart';
+import 'package:frontend/core/utils/diferenca.dart';
+import 'package:frontend/core/utils/proximo_elemento.dart';
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/domain/compras/usecases/compra_usecase.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
@@ -53,17 +56,47 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     BuscarCompras event,
     Emitter<ComprasState> emit,
   ) async {
-    print("ESTOU NO BLOC ZECA URUBU");
     final List<ComprasEntity> listaCompras = await usecase.buscarCompras();
-    print("LISTA DE COMPRAS: $listaCompras");
-    emit(state.copyWith(listaCompras: listaCompras, sucesso: true));
+    final Map<String, String> economiaPorMes = {};
+    final Map<String, String> porcentagemPorMesLucro = {};
+
+    for (var compra in listaCompras) {
+      final ComprasEntity proximaCompra =
+          listaCompras[proximoElemento(
+            listaCompras.indexOf(compra),
+            listaCompras.length,
+          )];
+      economiaPorMes.putIfAbsent(
+        compra.id.toString(),
+        () => calcularDiferenca(compra.valorTotal, proximaCompra.valorTotal),
+      );
+
+      porcentagemPorMesLucro.putIfAbsent(
+        compra.id.toString(),
+        () => double.parse(
+          calcularEconomiaPercentual(
+            compra.valorTotal,
+            proximaCompra.valorTotal,
+          ),
+        ).abs().toString(),
+      );
+    }
+
+    emit(
+      state.copyWith(
+        listaCompras: listaCompras,
+        economiaPorMes: economiaPorMes,
+        porcentagemPorMesLucro: porcentagemPorMesLucro,
+        sucesso: true,
+      ),
+    );
   }
 
   Future<void> _atualizarCompra(
     AtualizarCompra event,
     Emitter<ComprasState> emit,
   ) async {
-    final compraAtual = state.compra;
+    final compraAtual = state.compraAtual;
     if (compraAtual == null) return;
 
     final compraSalva = await usecase.atualizarCompra(

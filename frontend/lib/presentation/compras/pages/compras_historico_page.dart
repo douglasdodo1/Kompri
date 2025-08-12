@@ -10,6 +10,10 @@ class CompraHistoricoPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 245, 243, 234),
         title: const Text("Histórico de compras"),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Container(color: Colors.grey, height: 1.0),
+        ),
       ),
       body: Center(child: ListaCompras()),
     );

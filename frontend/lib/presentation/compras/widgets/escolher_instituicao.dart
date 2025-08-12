@@ -25,7 +25,7 @@ class _EscolherInstituicaoState extends State<EscolherInstituicao> {
 
     return BlocConsumer<ComprasBloc, ComprasState>(
       listener: (context, state) {
-        final ComprasEntity? compra = state.compra;
+        final ComprasEntity? compra = state.compraAtual;
       },
       builder: (context, state) {
         return Card(

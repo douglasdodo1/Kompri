@@ -2,6 +2,7 @@ import 'package:frontend/domain/compras/entities/compras_entity.dart';
 import 'package:frontend/domain/compras/repositories/compras_repository.dart';
 import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
+import 'package:intl/intl.dart';
 
 class CompraUsecase {
   final ComprasRepository repository;
@@ -31,6 +32,15 @@ class CompraUsecase {
     deletarItemId,
   );
 
-  Future<List<ComprasEntity>> buscarCompras() async =>
-      repository.buscarCompras();
+  Future<List<ComprasEntity>> buscarCompras() async {
+    final List<ComprasEntity> listaCompras = await repository.buscarCompras();
+    if (listaCompras.isEmpty) return [];
+
+    listaCompras.sort((a, b) {
+      final dateA = DateFormat('MM/yyyy').parse(a.data);
+      final dateB = DateFormat('MM/yyyy').parse(b.data);
+      return dateB.compareTo(dateA);
+    });
+    return listaCompras;
+  }
 }

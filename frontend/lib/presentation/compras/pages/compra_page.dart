@@ -13,9 +13,7 @@ class CompraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Adiciona o evento diretamente no build usando o bloc do contexto
     context.read<ComprasBloc>().add(CarregarCompra());
-
     return const _ComprasView();
   }
 }
@@ -48,25 +46,42 @@ class _ComprasViewState extends State<_ComprasView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("Kompri - Compras"),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 248, 248, 245),
+        title: const Text(
+          "Nova compra",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color.fromARGB(255, 56, 57, 58),
+            letterSpacing: 1.2,
+            shadows: [
+              Shadow(
+                color: Colors.black26,
+                offset: Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
         ),
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: ListView(
-              children: <Widget>[
-                SizedBox(height: 24.h),
-                AnaliseGastos(),
-                SizedBox(height: 15.h),
-                AdicionarItem(),
-                SizedBox(height: 15.h),
-                ListaItens(),
-              ],
-            ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Container(color: Colors.grey, height: 1.0),
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: ListView(
+            children: <Widget>[
+              SizedBox(height: 24.h),
+              AnaliseGastos(),
+              SizedBox(height: 15.h),
+              AdicionarItem(),
+              SizedBox(height: 15.h),
+              ListaItens(),
+            ],
           ),
         ),
       ),
