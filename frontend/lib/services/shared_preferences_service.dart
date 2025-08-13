@@ -30,4 +30,8 @@ class SharedPreferencesService {
       await _preferences.setStringList(key, value);
     }
   }
+
+  Future<void> clear() async {
+    await _preferences.clear();
+  }
 }

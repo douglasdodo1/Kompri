@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/presentation/produtos/bloc/produtos_bloc.dart';
@@ -58,83 +57,88 @@ class _ListaProdutosWidgetState extends State<ListaProdutosWidget> {
 
     return BlocBuilder<ProdutosBloc, ProdutosState>(
       builder: (context, state) {
-        return ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          itemCount: state.listaProdutos.length,
-          separatorBuilder: (_, _) => SizedBox(height: 8.h),
+        return Container(
+          color: const Color.fromARGB(255, 240, 238, 238),
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            itemCount: state.listaProdutos.length,
+            separatorBuilder: (_, _) => SizedBox(height: 8.h),
 
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 3,
-              shadowColor: Colors.black12,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: () {
-                  print('Produto clicado: ${state.listaProdutos[index]}');
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      width: 80.w,
-                      height: 80.h,
-                      margin: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: getCategoryColor(
-                          state.listaProdutos[index].categoria ?? "",
-                        ),
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      child: Icon(
-                        getCategoryIcon(
-                          state.listaProdutos[index].categoria ?? "",
-                        ),
-                        size: 40.sp,
-                        color: Colors.grey.shade800,
-                      ),
-                    ),
-
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: [
-                          Text(
-                            state.listaProdutos[index].nome,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4.h),
-
-                          Text(
-                            "${state.listaProdutos[index].marca} • ${state.listaProdutos[index].categoria}",
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Ícone seta
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.w, top: 8.h),
-                      child: Icon(Icons.chevron_right, color: Colors.grey[400]),
-                    ),
-                  ],
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 3,
+                shadowColor: Colors.black12,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-              ),
-            );
-          },
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () {
+                    print('Produto clicado: ${state.listaProdutos[index]}');
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 80.w,
+                        height: 80.h,
+                        margin: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: getCategoryColor(
+                            state.listaProdutos[index].categoria ?? "",
+                          ),
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: Icon(
+                          getCategoryIcon(
+                            state.listaProdutos[index].categoria ?? "",
+                          ),
+                          size: 40.sp,
+                          color: Colors.grey.shade800,
+                        ),
+                      ),
+
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                            Text(
+                              state.listaProdutos[index].nome,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+
+                            Text(
+                              "${state.listaProdutos[index].marca} • ${state.listaProdutos[index].categoria}",
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.only(right: 8.w, top: 8.h),
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );

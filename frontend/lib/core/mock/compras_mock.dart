@@ -22,7 +22,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_1_0',
         compraId: 1,
         produto: ProdutoEntity(
-          id: 1,
+          id: "1",
           nome: 'Arroz',
           marca: 'Tio João',
           categoria: 'Alimentos',
@@ -35,7 +35,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_1_1',
         compraId: 1,
         produto: ProdutoEntity(
-          id: 2,
+          id: "2",
           nome: 'Feijão',
           marca: 'Camil',
           categoria: 'Alimentos',
@@ -60,7 +60,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_2_0',
         compraId: 2,
         produto: ProdutoEntity(
-          id: 3,
+          id: "3",
           nome: 'Leite',
           marca: 'Italac',
           categoria: 'Laticínios',
@@ -85,7 +85,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_3_0',
         compraId: 3,
         produto: ProdutoEntity(
-          id: 4,
+          id: "4",
           nome: 'Café',
           marca: 'Pilão',
           categoria: 'Bebidas',
@@ -98,7 +98,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_3_1',
         compraId: 3,
         produto: ProdutoEntity(
-          id: 5,
+          id: "5",
           nome: 'Açúcar',
           marca: 'União',
           categoria: 'Alimentos',
@@ -111,7 +111,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_3_2',
         compraId: 3,
         produto: ProdutoEntity(
-          id: 6,
+          id: "6",
           nome: 'Óleo de Soja',
           marca: 'Liza',
           categoria: 'Alimentos',
@@ -124,8 +124,6 @@ final List<ComprasEntity> comprasMock = [
     instituicao: InstituicaoEntity(id: 1, nome: 'Supermercado A'),
   ),
 
-  // Para as próximas compras, continue subtraindo os meses, usando DateTime(baseDate.year, baseDate.month - N)
-  // Vou continuar abaixo só as datas para ilustrar o padrão, copie o padrão acima para cada compra.
   ComprasEntity(
     id: 4,
     status: 'cancelada',
@@ -139,7 +137,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_4_0',
         compraId: 4,
         produto: ProdutoEntity(
-          id: 7,
+          id: "7",
           nome: 'Sabonete',
           marca: 'Dove',
           categoria: 'Higiene',
@@ -152,7 +150,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_4_1',
         compraId: 4,
         produto: ProdutoEntity(
-          id: 8,
+          id: "8",
           nome: 'Detergente',
           marca: 'Ypê',
           categoria: 'Limpeza',
@@ -177,7 +175,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_5_0',
         compraId: 5,
         produto: ProdutoEntity(
-          id: 9,
+          id: "9",
           nome: 'Macarrão',
           marca: 'Barilla',
           categoria: 'Alimentos',
@@ -202,7 +200,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_6_0',
         compraId: 6,
         produto: ProdutoEntity(
-          id: 10,
+          id: "1",
           nome: 'Papel Higiênico',
           marca: 'Neve',
           categoria: 'Higiene',
@@ -215,7 +213,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_6_1',
         compraId: 6,
         produto: ProdutoEntity(
-          id: 11,
+          id: "1",
           nome: 'Cereal',
           marca: 'Kellogg’s',
           categoria: 'Alimentos',
@@ -228,7 +226,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_6_2',
         compraId: 6,
         produto: ProdutoEntity(
-          id: 12,
+          id: "1",
           nome: 'Suco',
           marca: 'Del Valle',
           categoria: 'Bebidas',
@@ -253,7 +251,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_7_0',
         compraId: 7,
         produto: ProdutoEntity(
-          id: 13,
+          id: "1",
           nome: 'Biscoito',
           marca: 'Trakinas',
           categoria: 'Alimentos',
@@ -278,7 +276,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_8_0',
         compraId: 8,
         produto: ProdutoEntity(
-          id: 14,
+          id: "1",
           nome: 'Refrigerante',
           marca: 'Coca-Cola',
           categoria: 'Bebidas',
@@ -291,7 +289,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_8_1',
         compraId: 8,
         produto: ProdutoEntity(
-          id: 15,
+          id: "1",
           nome: 'Chips',
           marca: 'Lay’s',
           categoria: 'Alimentos',
@@ -316,7 +314,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_9_0',
         compraId: 9,
         produto: ProdutoEntity(
-          id: 16,
+          id: "1",
           nome: 'Molho de Tomate',
           marca: 'Pomarola',
           categoria: 'Alimentos',
@@ -341,7 +339,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_10_0',
         compraId: 10,
         produto: ProdutoEntity(
-          id: 17,
+          id: "1",
           nome: 'Leite Condensado',
           marca: 'Moça',
           categoria: 'Laticínios',
@@ -354,7 +352,7 @@ final List<ComprasEntity> comprasMock = [
         id: 'item_10_1',
         compraId: 10,
         produto: ProdutoEntity(
-          id: 18,
+          id: "1",
           nome: 'Creme de Leite',
           marca: 'Nestlé',
           categoria: 'Laticínios',

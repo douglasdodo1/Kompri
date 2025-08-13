@@ -5,6 +5,8 @@ import 'package:frontend/domain/produtos/entities/produto_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
+import 'package:frontend/presentation/produtos/bloc/produtos_bloc.dart';
+import 'package:frontend/presentation/produtos/bloc/produtos_event.dart';
 
 class AdicionarItem extends StatefulWidget {
   const AdicionarItem({super.key});
@@ -21,7 +23,7 @@ class _AdicionarItemState extends State<AdicionarItem> {
       id: "-1",
       compraId: -1,
       produto: ProdutoEntity(
-        id: -1,
+        id: "-1",
         nome: nomeProduto.trim(),
         marca: null,
         categoria: null,
@@ -32,6 +34,7 @@ class _AdicionarItemState extends State<AdicionarItem> {
     );
 
     context.read<ComprasBloc>().add(AtualizarCompra(item: novoItem));
+    context.read<ProdutosBloc>().add(CriarProduto(novoItem.produto));
     _controller.clear();
   }
 

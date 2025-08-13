@@ -11,6 +11,13 @@ class BuscarProdutos extends ProdutosEvent {
   BuscarProdutos();
 }
 
+class AtualizarProduto extends ProdutosEvent {
+  final String id;
+  final String? novaMarca;
+  final String? novaCategoria;
+  AtualizarProduto({required this.id, this.novaMarca, this.novaCategoria});
+}
+
 class DeletarProduto extends ProdutosEvent {
   final int id;
   DeletarProduto(this.id);

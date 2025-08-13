@@ -114,7 +114,7 @@ class _ListaComprasState extends State<ListaCompras> {
                       ],
                     ),
 
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8.w),
 
                     Text(
                       economizou

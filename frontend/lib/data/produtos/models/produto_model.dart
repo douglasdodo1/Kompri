@@ -1,7 +1,7 @@
 import 'package:frontend/domain/produtos/entities/produto_entity.dart';
 
 class ProdutoModel {
-  final int id;
+  final String id;
   final String nome;
   final String? marca;
   final String? categoria;

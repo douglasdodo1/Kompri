@@ -46,7 +46,6 @@ class _CompraPageState extends State<CompraPage> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 56, 57, 58),
             letterSpacing: 1.2,
             shadows: [
               Shadow(
@@ -59,21 +58,24 @@ class _CompraPageState extends State<CompraPage> {
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
-          child: Container(color: Colors.grey, height: 1.0),
+          child: Container(color: Colors.grey, height: 1.h),
         ),
       ),
       body: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height: 24.h),
-              const AnaliseGastos(),
-              SizedBox(height: 15.h),
-              const AdicionarItem(),
-              SizedBox(height: 15.h),
-              const ListaItens(),
-            ],
+        child: Container(
+          color: const Color.fromARGB(255, 240, 238, 238),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: ListView(
+              children: <Widget>[
+                SizedBox(height: 24.h),
+                const AnaliseGastos(),
+                SizedBox(height: 15.h),
+                const AdicionarItem(),
+                SizedBox(height: 15.h),
+                const ListaItens(),
+              ],
+            ),
           ),
         ),
       ),

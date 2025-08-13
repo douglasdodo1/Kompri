@@ -8,7 +8,6 @@ class ListaProdutosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 248, 248, 245),
         title: const Text(
           "Meus produtos",
           style: TextStyle(

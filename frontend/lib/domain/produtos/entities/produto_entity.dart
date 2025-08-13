@@ -1,7 +1,7 @@
 import 'package:frontend/data/produtos/models/produto_model.dart';
 
 class ProdutoEntity {
-  final int id;
+  final String id;
   final String nome;
   final String? marca;
   final String? categoria;
@@ -16,7 +16,7 @@ class ProdutoEntity {
   ProdutoModel toModel() => ProdutoModel(id, nome, marca, categoria);
 
   ProdutoEntity copyWith({
-    int? id,
+    String? id,
     String? nome,
     String? marca,
     String? categoria,

@@ -3,11 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/core/utils/format_to_cash.dart';
+import 'package:frontend/domain/itens/entities/item_entity.dart';
 import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
 import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
 import 'package:frontend/core/widgets/editable_chip_widget.dart';
 import 'package:frontend/presentation/compras/widgets/lista_itens_vazia_widget.dart';
+import 'package:frontend/presentation/produtos/bloc/produtos_bloc.dart';
+import 'package:frontend/presentation/produtos/bloc/produtos_event.dart';
 
 class ListaItens extends StatefulWidget {
   const ListaItens({super.key});
@@ -21,6 +24,27 @@ class _ListaItensState extends State<ListaItens> {
   void initState() {
     super.initState();
     context.read<ComprasBloc>().add(BuscarCompraRecente());
+  }
+
+  void _editarItem(String? novaMarca, String? novaCategoria, ItemEntity item) {
+    context.read<ComprasBloc>().add(
+      AtualizarCompra(
+        item: item.copyWith(
+          produto: item.produto.copyWith(
+            marca: novaMarca,
+            categoria: novaCategoria,
+          ),
+        ),
+      ),
+    );
+
+    context.read<ProdutosBloc>().add(
+      AtualizarProduto(
+        id: item.produto.id,
+        novaMarca: novaMarca,
+        novaCategoria: novaCategoria,
+      ),
+    );
   }
 
   void _editarCampo({
@@ -143,15 +167,7 @@ class _ListaItensState extends State<ListaItens> {
                                   hint: 'marca',
                                   corFundo: Colors.blue.shade50,
                                   onConfirmar: (novoValor) {
-                                    context.read<ComprasBloc>().add(
-                                      AtualizarCompra(
-                                        item: item.copyWith(
-                                          produto: item.produto.copyWith(
-                                            marca: novoValor,
-                                          ),
-                                        ),
-                                      ),
-                                    );
+                                    _editarItem(novoValor, null, item);
                                   },
                                 ),
 
@@ -163,15 +179,7 @@ class _ListaItensState extends State<ListaItens> {
                                   hint: 'categoria',
                                   corFundo: Colors.orange.shade50,
                                   onConfirmar: (novoValor) {
-                                    context.read<ComprasBloc>().add(
-                                      AtualizarCompra(
-                                        item: item.copyWith(
-                                          produto: item.produto.copyWith(
-                                            categoria: novoValor,
-                                          ),
-                                        ),
-                                      ),
-                                    );
+                                    _editarItem(null, novoValor, item);
                                   },
                                 ),
                               IconButton(
