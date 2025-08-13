@@ -5,7 +5,7 @@ class ProdutoUsecase {
   final ProdutoRepository repository;
   ProdutoUsecase(this.repository);
 
-  Future<void> criarProduto(ProdutoEntity produto) =>
+  Future<ProdutoEntity> criarProduto(ProdutoEntity produto) =>
       repository.criarProduto(produto);
   Future<List<ProdutoEntity>> buscarProdutos() async =>
       repository.getProdutos();

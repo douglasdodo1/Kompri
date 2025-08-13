@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/widgets/app_footer.dart';
 import 'package:frontend/presentation/compras/pages/compra_page.dart';
 import 'package:frontend/presentation/compras/pages/compras_historico_page.dart';
+import 'package:frontend/presentation/produtos/pages/lista_produtos_page.dart';
 
 class PaginaBase extends StatefulWidget {
   const PaginaBase({super.key});
@@ -15,7 +16,7 @@ class _PaginaBaseState extends State<PaginaBase> {
 
   final List<Widget> pages = [
     CompraPage(),
-    Center(child: Text('Carrinho')),
+    ListaProdutosPage(),
     CompraHistoricoPage(),
   ];
 

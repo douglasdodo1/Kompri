@@ -14,161 +14,144 @@ class ListaCompras extends StatefulWidget {
 }
 
 class _ListaComprasState extends State<ListaCompras> {
-  late final ComprasBloc bloc;
-
   @override
   void initState() {
     super.initState();
-    bloc = context.read<ComprasBloc>();
-    bloc.add(BuscarCompras());
+    context.read<ComprasBloc>().add(BuscarCompras());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ComprasBloc, ComprasState>(
       builder: (context, state) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            spacing: 5.h,
-            children: List.generate(state.listaCompras.length, (index) {
-              final item = state.listaCompras[index];
-              final valor =
-                  double.tryParse(
-                    state.economiaPorMes[item.id.toString()] ?? '0',
-                  ) ??
-                  0;
-              final bool economizou = valor < 0;
+        return ListView.separated(
+          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+          itemCount: state.listaCompras.length,
+          separatorBuilder: (_, _) => SizedBox(height: 8.h),
+          itemBuilder: (context, index) {
+            final item = state.listaCompras[index];
+            final valor =
+                double.tryParse(
+                  state.economiaPorMes[item.id.toString()] ?? '0',
+                ) ??
+                0;
+            final bool economizou = valor < 0;
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 2,
-                  horizontal: 16,
-                ),
-                child: Card(
-                  elevation: 2,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
+            return Card(
+              elevation: 2,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8.h,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 5.h,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              nomeDoMes(item.data.substring(0, 2)),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30.sp,
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                        Text(
+                          nomeDoMes(item.data.substring(0, 2)),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30.sp,
+                          ),
+                        ),
+                        Container(
+                          width: 85.w,
+                          height: 30.h,
+                          decoration: BoxDecoration(
+                            color: Colors.indigo[50],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
                               children: [
-                                Container(
-                                  width: 85.w,
-                                  height: 30.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.indigo[50],
-                                    borderRadius: BorderRadius.circular(12),
+                                Text(
+                                  "${state.porcentagemPorMesLucro[item.id.toString()]}%",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.sp,
+                                    color: economizou
+                                        ? Colors.green
+                                        : Colors.red,
                                   ),
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "${state.porcentagemPorMesLucro[item.id.toString()]}%",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.sp,
-                                            color: economizou
-                                                ? Colors.green
-                                                : Colors.red,
-                                          ),
-                                        ),
-                                        Icon(
-                                          economizou
-                                              ? Icons.trending_up
-                                              : Icons.trending_down,
-                                          color: economizou
-                                              ? Colors.green
-                                              : Colors.red,
-                                          size: 20,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                ),
+                                Icon(
+                                  economizou
+                                      ? Icons.trending_up
+                                      : Icons.trending_down,
+                                  color: economizou ? Colors.green : Colors.red,
+                                  size: 20,
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                item.instituicao.nome,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              "Comprou: ${item.qtdItens} itens",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 8.h),
-
-                        Text(
-                          economizou
-                              ? "Você economizou ${state.economiaPorMes[item.id.toString()]?.substring(1)} em relação ao mês anterior"
-                              : "Você gastou ${state.economiaPorMes[item.id.toString()]} a mais em relação ao mês anterior",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12.sp,
                           ),
-                        ),
-
-                        Divider(color: Colors.grey[300]),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Total: R\$ ${item.valorTotal}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                            Text(
-                              "Estimado: R\$ ${item.valorEstimado}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
-                  ),
+
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            item.instituicao.nome,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          "Comprou: ${item.qtdItens} itens",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 8.h),
+
+                    Text(
+                      economizou
+                          ? "Você economizou ${state.economiaPorMes[item.id.toString()]?.substring(1)} em relação ao mês anterior"
+                          : "Você gastou ${state.economiaPorMes[item.id.toString()]} a mais em relação ao mês anterior",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+
+                    Divider(color: Colors.grey[300]),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Total: R\$ ${item.valorTotal}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        Text(
+                          "Estimado: R\$ ${item.valorEstimado}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              );
-            }),
-          ),
+              ),
+            );
+          },
         );
       },
     );

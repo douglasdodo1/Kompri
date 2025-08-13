@@ -8,27 +8,19 @@ import 'package:frontend/presentation/compras/widgets/boas_vindas.dart';
 import 'package:frontend/presentation/compras/widgets/adicionar_item.dart';
 import 'package:frontend/presentation/compras/widgets/lista_itens_widget.dart';
 
-class CompraPage extends StatelessWidget {
+class CompraPage extends StatefulWidget {
   const CompraPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    context.read<ComprasBloc>().add(CarregarCompra());
-    return const _ComprasView();
-  }
+  State<CompraPage> createState() => _CompraPageState();
 }
 
-class _ComprasView extends StatefulWidget {
-  const _ComprasView();
-
-  @override
-  State<_ComprasView> createState() => _ComprasViewState();
-}
-
-class _ComprasViewState extends State<_ComprasView> {
+class _CompraPageState extends State<CompraPage> {
   @override
   void initState() {
     super.initState();
+
+    context.read<ComprasBloc>().add(CarregarCompra());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
@@ -76,11 +68,11 @@ class _ComprasViewState extends State<_ComprasView> {
           child: ListView(
             children: <Widget>[
               SizedBox(height: 24.h),
-              AnaliseGastos(),
+              const AnaliseGastos(),
               SizedBox(height: 15.h),
-              AdicionarItem(),
+              const AdicionarItem(),
               SizedBox(height: 15.h),
-              ListaItens(),
+              const ListaItens(),
             ],
           ),
         ),
