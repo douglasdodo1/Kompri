@@ -27,6 +27,7 @@ class _ListaItensState extends State<ListaItens> {
   }
 
   void _editarItem(String? novaMarca, String? novaCategoria, ItemEntity item) {
+    print("item(LISTA_ITENS_WIDGET): $item");
     context.read<ComprasBloc>().add(
       AtualizarCompra(
         item: item.copyWith(

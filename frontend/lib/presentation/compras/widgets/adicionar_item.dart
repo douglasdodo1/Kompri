@@ -7,6 +7,7 @@ import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/compras/bloc/compras_state.dart';
 import 'package:frontend/presentation/produtos/bloc/produtos_bloc.dart';
 import 'package:frontend/presentation/produtos/bloc/produtos_event.dart';
+import 'package:uuid/uuid.dart';
 
 class AdicionarItem extends StatefulWidget {
   const AdicionarItem({super.key});
@@ -19,11 +20,13 @@ class _AdicionarItemState extends State<AdicionarItem> {
   final TextEditingController _controller = TextEditingController();
 
   void _cadastrarItem(String nomeProduto) {
+    final uuid = Uuid();
+
     final novoItem = ItemEntity(
-      id: "-1",
+      id: uuid.v4(),
       compraId: -1,
       produto: ProdutoEntity(
-        id: "-1",
+        id: uuid.v4(),
         nome: nomeProduto.trim(),
         marca: null,
         categoria: null,

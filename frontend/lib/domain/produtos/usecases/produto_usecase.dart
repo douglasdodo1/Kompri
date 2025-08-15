@@ -1,6 +1,5 @@
 import 'package:frontend/domain/produtos/entities/produto_entity.dart';
 import 'package:frontend/domain/produtos/repositories/produto_repository.dart';
-import 'package:uuid/uuid.dart';
 
 class ProdutoUsecase {
   final ProdutoRepository repository;

@@ -50,7 +50,6 @@ class ComprasRepositoryImpl implements ComprasRepository {
 
   @override
   Future<List<ComprasEntity>> buscarCompras() async {
-    print("BUSCANDO COMPRAS MOCK");
     return comprasMock;
   }
 
@@ -77,7 +76,6 @@ class ComprasRepositoryImpl implements ComprasRepository {
     }
 
     final Map<String, dynamic> compraJson = jsonDecode(compraJsonString);
-    print("COMPRA JSON: $compraJson");
 
     final compraSalva = ComprasModel.fromJson(compraJson).toEntity();
 
@@ -94,11 +92,15 @@ class ComprasRepositoryImpl implements ComprasRepository {
 
     if (item != null) {
       int index = listaItensAtualizada.indexWhere((i) => i.id == item?.id);
-
+      print("produto para atualizar(NA COMPRA): ${item.produto}");
       if (index != -1) {
         listaItensAtualizada[index] = item;
       } else {
-        item = item.copyWith(compraId: compraSalva.id, id: uuid.v4());
+        item = item.copyWith(
+          compraId: compraSalva.id,
+          id: uuid.v4(),
+          produto: item.produto.copyWith(id: uuid.v4()),
+        );
 
         listaItensAtualizada.add(item);
       }

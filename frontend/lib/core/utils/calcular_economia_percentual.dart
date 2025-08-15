@@ -13,9 +13,6 @@ String calcularEconomiaPercentual(
   }
   final double diferenca = totalAtual - totalAnterior;
   final double percentual = ((diferenca / totalAnterior) * 100);
-  print(
-    'totalAtual: $totalAtual, totalAnterior: $totalAnterior, diferenca: $diferenca, percentual: $percentual',
-  );
 
   return percentual.toStringAsFixed(2);
 }

@@ -22,8 +22,7 @@ class ProdutosBloc extends Bloc<ProdutosEvent, ProdutosState> {
       event.produto,
     );
 
-    final List<ProdutoEntity> listaProdutos = await produtoUsecase
-        .buscarProdutos();
+    final List<ProdutoEntity> listaProdutos = state.listaProdutos;
 
     final List<ProdutoEntity> listaProdutosAtualizada = [
       ...listaProdutos,
@@ -47,6 +46,8 @@ class ProdutosBloc extends Bloc<ProdutosEvent, ProdutosState> {
   ) async {
     final List<ProdutoEntity> listaAtualizada = await produtoUsecase
         .atualizarProduto(event.id, event.novaMarca, event.novaCategoria);
+
+    print("listaAtualizada: $listaAtualizada");
     emit(state.copyWith(listaProdutos: listaAtualizada, sucesso: true));
   }
 

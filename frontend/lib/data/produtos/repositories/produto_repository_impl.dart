@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:frontend/core/mock/produtos_mock.dart';
 import 'package:frontend/data/produtos/models/produto_model.dart';
 import 'package:frontend/domain/produtos/entities/produto_entity.dart';
 import 'package:frontend/domain/produtos/repositories/produto_repository.dart';
@@ -13,7 +11,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   @override
   Future<ProdutoEntity> criarProduto(ProdutoEntity produto) async {
     final prefs = await SharedPreferencesService.getInstance();
-
+    print("produto para atualizar(NO PRODUTO_IMPL): ${produto}");
     final produtosString = prefs.getData('produtos');
 
     List<ProdutoModel> listaProdutosModel = [];
@@ -86,6 +84,8 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
     }
 
     print('listaProdutosEntity: $listaProdutosEntity');
+
+    print("id: $id, novaMarca: $novaMarca, novaCategoria: $novaCategoria");
 
     final produto = listaProdutosEntity
         .firstWhere((p) => p.id == id)
