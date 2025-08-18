@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 
-class AppFooter extends StatefulWidget {
+class AppFooter extends StatelessWidget {
   final ValueChanged<int> onItemTapped;
   final int selectedIndex;
+
   const AppFooter({
     super.key,
     required this.onItemTapped,
     required this.selectedIndex,
   });
 
-  @override
-  State<AppFooter> createState() => _AppFooterState();
-}
-
-class _AppFooterState extends State<AppFooter> {
-  final List<_FooterItem> items = const [
-    _FooterItem(icon: Icons.home, label: 'Início'),
-    _FooterItem(icon: Icons.shopping_bag, label: 'Meus produtos'),
-    _FooterItem(icon: Icons.history, label: 'Histórico'),
+  final List<FooterItem> items = const [
+    FooterItem(icon: Icons.home, label: 'Início'),
+    FooterItem(icon: Icons.shopping_bag, label: 'Meus produtos'),
+    FooterItem(icon: Icons.history, label: 'Histórico'),
   ];
 
   @override
@@ -33,13 +29,11 @@ class _AppFooterState extends State<AppFooter> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(items.length, (index) {
           final item = items[index];
-          final isSelected = widget.selectedIndex == index;
+          final isSelected = selectedIndex == index;
 
           return Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                widget.onItemTapped(index);
-              },
+              onPressed: () => onItemTapped(index),
               style: ElevatedButton.styleFrom(
                 backgroundColor: isSelected ? Colors.indigo[50] : Colors.white,
                 foregroundColor: isSelected ? Colors.indigo : Colors.grey[700],
@@ -71,9 +65,9 @@ class _AppFooterState extends State<AppFooter> {
   }
 }
 
-class _FooterItem {
+class FooterItem {
   final IconData icon;
   final String label;
 
-  const _FooterItem({required this.icon, required this.label});
+  const FooterItem({required this.icon, required this.label});
 }
