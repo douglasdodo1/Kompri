@@ -39,6 +39,20 @@ class ComprasModel {
     );
   }
 
+  factory ComprasModel.fromEntity(ComprasEntity entity) {
+    return ComprasModel(
+      entity.id,
+      entity.data,
+      entity.status,
+      double.tryParse(entity.valorTotal) ?? 0.00,
+      double.tryParse(entity.valorEstimado) ?? 0.00,
+      entity.qtdItens,
+      entity.usuarioCpf,
+      entity.itens.map((e) => e.toModel()).toList(),
+      entity.instituicao.toModel(),
+    );
+  }
+
   ComprasEntity toEntity() {
     return ComprasEntity(
       id: id,

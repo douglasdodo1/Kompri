@@ -8,28 +8,43 @@ class ProdutosBloc extends Bloc<ProdutosEvent, ProdutosState> {
   final ProdutoUsecase produtoUsecase;
 
   ProdutosBloc(this.produtoUsecase) : super(ProdutosState.initial()) {
+    on<PesquisarProdutoString>(_pesquisarProdutoString);
     on<CriarProduto>(_criarProduto);
     on<BuscarProdutos>(_buscarProdutos);
     on<AtualizarProduto>(_atualizarProduto);
+    on<AdicinarEmCompra>(_adicinarEmCompra);
     on<DeletarProduto>(_deletarProduto);
+  }
+
+  Future<void> _pesquisarProdutoString(
+    PesquisarProdutoString event,
+    Emitter<ProdutosState> emit,
+  ) async {
+    emit(state.copyWith(pesquisa: event.pesquisa));
   }
 
   Future<void> _criarProduto(
     CriarProduto event,
     Emitter<ProdutosState> emit,
   ) async {
-    final ProdutoEntity produtoCriado = await produtoUsecase.criarProduto(
+    final ProdutoEntity? produtoCriado = await produtoUsecase.criarProduto(
       event.produto,
     );
 
-    final List<ProdutoEntity> listaProdutos = state.listaProdutos;
+    if (produtoCriado != null) {
+      final List<ProdutoEntity> listaProdutos = state.listaProdutos;
 
-    final List<ProdutoEntity> listaProdutosAtualizada = [
-      ...listaProdutos,
-      produtoCriado,
-    ];
+      final List<ProdutoEntity> listaProdutosAtualizada = [
+        ...listaProdutos,
+        produtoCriado,
+      ];
 
-    emit(state.copyWith(listaProdutos: listaProdutosAtualizada, sucesso: true));
+      emit(
+        state.copyWith(listaProdutos: listaProdutosAtualizada, sucesso: true),
+      );
+
+      emit(state.copyWith(sucesso: true));
+    }
   }
 
   Future<void> _buscarProdutos(
@@ -47,8 +62,14 @@ class ProdutosBloc extends Bloc<ProdutosEvent, ProdutosState> {
     final List<ProdutoEntity> listaAtualizada = await produtoUsecase
         .atualizarProduto(event.id, event.novaMarca, event.novaCategoria);
 
-    print("listaAtualizada: $listaAtualizada");
     emit(state.copyWith(listaProdutos: listaAtualizada, sucesso: true));
+  }
+
+  Future<void> _adicinarEmCompra(
+    AdicinarEmCompra event,
+    Emitter<ProdutosState> emit,
+  ) async {
+    await produtoUsecase.adicionarEmCompra(event.produto);
   }
 
   Future<void> _deletarProduto(

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/domain/itens/entities/item_entity.dart';
+import 'package:frontend/domain/produtos/entities/produto_entity.dart';
+import 'package:frontend/presentation/compras/bloc/compras_bloc.dart';
+import 'package:frontend/presentation/compras/bloc/compras_event.dart';
 import 'package:frontend/presentation/produtos/bloc/produtos_bloc.dart';
 import 'package:frontend/presentation/produtos/bloc/produtos_event.dart';
 import 'package:frontend/presentation/produtos/bloc/produtos_state.dart';
+import 'package:uuid/uuid.dart';
 
 class ListaProdutosWidget extends StatefulWidget {
   const ListaProdutosWidget({super.key});
@@ -55,27 +60,41 @@ class _ListaProdutosWidgetState extends State<ListaProdutosWidget> {
       }
     }
 
+    void adicionarEmCompra(ProdutoEntity produto) {
+      final compra = context.read<ComprasBloc>().state.compraAtual;
+      if (compra == null) return;
+
+      final item = ItemEntity(
+        id: Uuid().v4(),
+        compraId: compra.id,
+        produto: produto,
+        quantidade: 1,
+        valor: 0.0,
+        comprado: false,
+      );
+
+      context.read<ComprasBloc>().add(AtualizarCompra(item: item));
+    }
+
     return BlocBuilder<ProdutosBloc, ProdutosState>(
       builder: (context, state) {
-        return Container(
-          color: const Color.fromARGB(255, 240, 238, 238),
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            itemCount: state.listaProdutos.length,
-            separatorBuilder: (_, _) => SizedBox(height: 8.h),
+        return Expanded(
+          child: Container(
+            color: const Color.fromARGB(255, 240, 238, 238),
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              itemCount: state.listaProdutos.length,
+              separatorBuilder: (_, _) => SizedBox(height: 8.h),
 
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 3,
-                shadowColor: Colors.black12,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () {
-                    print('Produto clicado: ${state.listaProdutos[index]}');
-                  },
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 3,
+                  shadowColor: Colors.black12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+
                   child: Row(
                     children: [
                       Container(
@@ -125,19 +144,38 @@ class _ListaProdutosWidgetState extends State<ListaProdutosWidget> {
                           ],
                         ),
                       ),
-
                       Padding(
-                        padding: EdgeInsets.only(right: 8.w, top: 8.h),
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: Colors.grey[400],
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () =>
+                                  adicionarEmCompra(state.listaProdutos[index]),
+                              icon: Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                context.read<ProdutosBloc>().add(
+                                  DeletarProduto(state.listaProdutos[index].id),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.delete_outline,
+                                color: Colors.red[300],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         );
       },

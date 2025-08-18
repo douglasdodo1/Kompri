@@ -15,6 +15,7 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     on<BuscarCompras>(_buscarCompras);
     on<BuscarCompraRecente>(_buscarCompraRecente);
     on<AtualizarCompra>(_atualizarCompra);
+    on<SalvarCompra>(_salvarCompra);
 
     on<CarregarCompra>((event, emit) async {
       emit(state.copyWith(carregando: true));
@@ -31,9 +32,9 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     CriarCompra event,
     Emitter<ComprasState> emit,
   ) async {
-    await usecase.criarCompra(event.compra);
+    final ComprasEntity compra = await usecase.criarCompra(event.compra);
 
-    emit(state.copyWith(compra: event.compra, sucesso: true));
+    emit(state.copyWith(compra: compra, sucesso: true));
   }
 
   Future<void> _buscarRecentes(
@@ -71,6 +72,10 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
         () => calcularDiferenca(compra.valorTotal, proximaCompra.valorTotal),
       );
 
+      print(
+        "CALCULAR DIFERENCA: ${calcularDiferenca(compra.valorTotal, proximaCompra.valorTotal)}",
+      );
+
       porcentagemPorMesLucro.putIfAbsent(
         compra.id.toString(),
         () => double.parse(
@@ -82,14 +87,17 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
       );
     }
 
+    print("ECONOMIA POR MES: $economiaPorMes");
+
     emit(
       state.copyWith(
         listaCompras: listaCompras,
         economiaPorMes: economiaPorMes,
         porcentagemPorMesLucro: porcentagemPorMesLucro,
-        sucesso: true,
       ),
     );
+
+    emit(state.copyWith(sucesso: false));
   }
 
   Future<void> _atualizarCompra(
@@ -110,5 +118,17 @@ class ComprasBloc extends Bloc<ComprasEvent, ComprasState> {
     );
 
     emit(state.copyWith(compra: compraSalva, sucesso: true));
+  }
+
+  Future<void> _salvarCompra(
+    SalvarCompra event,
+    Emitter<ComprasState> emit,
+  ) async {
+    if (state.compraAtual == null) {
+      return;
+    }
+    final comprasSalvas = await usecase.salvarCompra(state.compraAtual);
+    emit(state.copyWith(sucesso: true));
+    emit(state.copyWith(sucesso: false));
   }
 }

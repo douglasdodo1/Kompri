@@ -45,3 +45,7 @@ class BuscarCompraRecente extends ComprasEvent {
 class BuscarCompras extends ComprasEvent {
   BuscarCompras();
 }
+
+class SalvarCompra extends ComprasEvent {
+  SalvarCompra();
+}

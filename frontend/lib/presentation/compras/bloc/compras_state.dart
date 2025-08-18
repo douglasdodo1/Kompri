@@ -1,9 +1,10 @@
 import 'package:frontend/domain/compras/entities/compras_entity.dart';
+import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 
 class ComprasState {
   final List<ComprasEntity> listaCompras;
   final bool carregando;
-  final ComprasEntity? compraAtual;
+  final ComprasEntity compraAtual;
   final ComprasEntity? proximaCompra;
   final Map<String, String> economiaPorMes;
   final Map<String, String> porcentagemPorMesLucro;
@@ -24,7 +25,16 @@ class ComprasState {
   });
 
   factory ComprasState.inicial() => ComprasState(
-    compraAtual: null,
+    compraAtual: ComprasEntity(
+      id: 0,
+      valorTotal: '0.00',
+      valorEstimado: '0.00',
+      qtdItens: 0,
+      data: '',
+      status: '',
+      usuarioCpf: '',
+      instituicao: InstituicaoEntity(nome: '', id: 0),
+    ),
     listaCompras: [],
     proximaCompra: null,
     economiaPorMes: {},

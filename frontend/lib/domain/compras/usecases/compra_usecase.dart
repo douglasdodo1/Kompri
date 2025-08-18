@@ -8,7 +8,7 @@ class CompraUsecase {
   final ComprasRepository repository;
   CompraUsecase(this.repository);
 
-  Future<void> criarCompra(ComprasEntity compra) async =>
+  Future<ComprasEntity> criarCompra(ComprasEntity compra) async =>
       repository.criarCompra(compra);
 
   Future<ComprasEntity> buscarCompraRecente() async =>
@@ -43,4 +43,7 @@ class CompraUsecase {
     });
     return listaCompras;
   }
+
+  Future<List<ComprasEntity>> salvarCompra(ComprasEntity compra) async =>
+      repository.salvarCompra(compra);
 }

@@ -56,6 +56,7 @@ class _CompraPageState extends State<CompraPage> {
             ],
           ),
         ),
+
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Container(color: Colors.grey, height: 1.h),

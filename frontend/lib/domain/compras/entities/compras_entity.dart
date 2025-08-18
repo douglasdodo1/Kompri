@@ -3,7 +3,7 @@ import 'package:frontend/domain/instituicoes/entities/instituicao_entity.dart';
 import 'package:frontend/domain/itens/entities/item_entity.dart';
 
 class ComprasEntity {
-  final int? id;
+  final int id;
   final String data;
   final String status;
   final String valorTotal;
@@ -27,7 +27,7 @@ class ComprasEntity {
 
   ComprasModel toModel() {
     return ComprasModel(
-      id ?? -1,
+      id,
       data,
       status,
       double.tryParse(valorTotal) ?? 0.00,

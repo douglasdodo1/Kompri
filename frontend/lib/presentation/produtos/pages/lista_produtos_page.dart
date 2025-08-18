@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/presentation/produtos/widgets/lista_produtos_widget.dart';
+import 'package:frontend/presentation/produtos/widgets/pesquisar_produto.dart';
 
 class ListaProdutosPage extends StatelessWidget {
   const ListaProdutosPage({super.key});
@@ -25,7 +27,10 @@ class ListaProdutosPage extends StatelessWidget {
           ),
         ),
       ),
-      body: ListaProdutosWidget(),
+      body: Column(
+        spacing: 4.h,
+        children: [PesquisarProduto(), ListaProdutosWidget()],
+      ),
     );
   }
 }

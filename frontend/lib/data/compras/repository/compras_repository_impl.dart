@@ -13,7 +13,7 @@ class ComprasRepositoryImpl implements ComprasRepository {
   final uuid = Uuid();
 
   @override
-  Future<void> criarCompra(ComprasEntity compra) async {
+  Future<ComprasEntity> criarCompra(ComprasEntity compra) async {
     final prefs = await SharedPreferencesService.getInstance();
     final ComprasEntity compraConvertida = compra.copyWith(
       valorEstimado: virgulaParaPonto(compra.valorEstimado),
@@ -22,6 +22,8 @@ class ComprasRepositoryImpl implements ComprasRepository {
     ComprasModel comprasModel = compraConvertida.toModel();
     final jsonString = jsonEncode(comprasModel.toJson());
     await prefs.saveData('compra', jsonString);
+    final ComprasEntity compraCriada = comprasModel.toEntity();
+    return compraCriada;
   }
 
   @override
@@ -50,7 +52,13 @@ class ComprasRepositoryImpl implements ComprasRepository {
 
   @override
   Future<List<ComprasEntity>> buscarCompras() async {
-    return comprasMock;
+    final prefs = await SharedPreferencesService.getInstance();
+    final String compraString = prefs.getData('compras') ?? '[]';
+    final List<ComprasEntity> listaCompras = (jsonDecode(compraString) as List)
+        .map((compra) => ComprasModel.fromJson(compra).toEntity())
+        .toList();
+    print("LISTA COMPRAS: $listaCompras");
+    return listaCompras;
   }
 
   @override
@@ -89,28 +97,36 @@ class ComprasRepositoryImpl implements ComprasRepository {
     if (deletarItemId != null) {
       listaItensAtualizada.removeWhere((i) => i.id == deletarItemId);
     }
+    int qtdItensAtualizada = listaItensAtualizada.length;
 
     if (item != null) {
       int index = listaItensAtualizada.indexWhere((i) => i.id == item?.id);
-      print("produto para atualizar(NA COMPRA): ${item.produto}");
       if (index != -1) {
         listaItensAtualizada[index] = item;
       } else {
         item = item.copyWith(
           compraId: compraSalva.id,
-          id: uuid.v4(),
-          produto: item.produto.copyWith(id: uuid.v4()),
+          id: item.id,
+          produto: item.produto.copyWith(id: item.produto.id),
         );
 
         listaItensAtualizada.add(item);
+        qtdItensAtualizada++;
       }
     }
 
+    final valorTotalCalculado = listaItensAtualizada.fold<double>(
+      0,
+      (total, item) => total + (item.valor * item.quantidade),
+    );
+
+    print('VALOR TOTAL CALCULADO: $valorTotalCalculado');
+
     final compraAtualizada = compraSalva.copyWith(
       status: status,
-      valorTotal: valorTotal,
+      valorTotal: valorTotalCalculado.toString(),
       valorEstimado: valorEstimado,
-      qtdItens: qtdItens,
+      qtdItens: qtdItensAtualizada,
       itens: listaItensAtualizada,
       instituicao: instituicao,
     );
@@ -119,5 +135,36 @@ class ComprasRepositoryImpl implements ComprasRepository {
 
     await prefs.saveData('compra', jsonEncode(compraModel.toJson()));
     return compraAtualizada;
+  }
+
+  Future<void> criarItemEmCompra(ItemEntity item) async {}
+
+  @override
+  Future<List<ComprasEntity>> salvarCompra(ComprasEntity compra) async {
+    print("COMPRA PARA SER SALVA: ${compra.toModel().toJson()}");
+
+    final prefs = await SharedPreferencesService.getInstance();
+    final String compraString = prefs.getData('compras') ?? '[]';
+
+    final List<dynamic> lista = (jsonDecode(compraString) as List<dynamic>);
+    final List<ComprasModel> comprasModel = lista
+        .map((c) => ComprasModel.fromJson(c))
+        .toList();
+
+    final ComprasEntity ultimaCompra;
+    final ComprasEntity compraComId;
+    if (comprasModel.isNotEmpty) {
+      ultimaCompra = comprasModel.last.toEntity();
+      compraComId = compra.copyWith(id: (ultimaCompra.id + 1));
+      comprasModel.add(compraComId.toModel());
+    } else {
+      compraComId = compra.copyWith(id: 1);
+      comprasModel.add(compraComId.toModel());
+    }
+
+    final listaAtualizada = comprasModel.map((c) => c.toJson()).toList();
+    await prefs.saveData('compras', jsonEncode(listaAtualizada));
+
+    return [];
   }
 }

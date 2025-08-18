@@ -127,10 +127,15 @@ class _AnaliseGastosState extends State<AnaliseGastos> {
                             ),
                           ),
                           SizedBox(width: 8.w),
-                          Icon(
-                            LucideIcons.target,
-                            size: 20,
-                            color: Colors.grey[300],
+                          IconButton(
+                            onPressed: () {
+                              context.read<ComprasBloc>().add(SalvarCompra());
+                            },
+                            icon: Icon(
+                              LucideIcons.save,
+                              size: 20,
+                              color: Colors.grey[300],
+                            ),
                           ),
                         ],
                       ),

@@ -5,7 +5,7 @@ class ProdutoUsecase {
   final ProdutoRepository repository;
   ProdutoUsecase(this.repository);
 
-  Future<ProdutoEntity> criarProduto(ProdutoEntity produto) {
+  Future<ProdutoEntity?> criarProduto(ProdutoEntity produto) {
     final ProdutoEntity produtoTratado = produto.copyWith(
       marca: produto.marca ?? "marca não informada",
       categoria: produto.categoria ?? "categoria não informada",
@@ -20,11 +20,14 @@ class ProdutoUsecase {
   Future<ProdutoEntity> buscarProduto(int id) async =>
       repository.getProduto(id);
 
-  Future<List<ProdutoEntity>> atualizarProduto(
+  Future<void> adicionarEmCompra(ProdutoEntity produto) async =>
+      repository.adicionarEmCompra(produto);
+
+  Future <List<ProdutoEntity>> atualizarProduto(
     String id,
     String? novaMarca,
     String? novaCategoria,
   ) => repository.atualizarProduto(id, novaMarca, novaCategoria);
 
-  Future<void> deletarProduto(int id) => repository.deletarProduto(id);
+  Future<void> deletarProduto(String id) => repository.deletarProduto(id);
 }

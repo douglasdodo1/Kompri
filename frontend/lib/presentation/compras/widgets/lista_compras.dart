@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +24,13 @@ class _ListaComprasState extends State<ListaCompras> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ComprasBloc, ComprasState>(
+    return BlocConsumer<ComprasBloc, ComprasState>(
+      listener: (context, state) {
+        if (state.sucesso) {
+          print("ATUALIZANDO");
+          context.read<ComprasBloc>().add(BuscarCompras());
+        }
+      },
       builder: (context, state) {
         return ListView.separated(
           padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
@@ -35,7 +43,7 @@ class _ListaComprasState extends State<ListaCompras> {
                   state.economiaPorMes[item.id.toString()] ?? '0',
                 ) ??
                 0;
-            final bool economizou = valor < 0;
+            final bool economizou = valor > 0;
 
             return Card(
               elevation: 2,
@@ -44,7 +52,6 @@ class _ListaComprasState extends State<ListaCompras> {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 8.h,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +98,6 @@ class _ListaComprasState extends State<ListaCompras> {
                         ),
                       ],
                     ),
-
                     Row(
                       children: [
                         Flexible(
@@ -113,9 +119,7 @@ class _ListaComprasState extends State<ListaCompras> {
                         ),
                       ],
                     ),
-
                     SizedBox(height: 8.w),
-
                     Text(
                       economizou
                           ? "Você economizou ${state.economiaPorMes[item.id.toString()]?.substring(1)} em relação ao mês anterior"
@@ -125,9 +129,7 @@ class _ListaComprasState extends State<ListaCompras> {
                         fontSize: 12.sp,
                       ),
                     ),
-
                     Divider(color: Colors.grey[300]),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
