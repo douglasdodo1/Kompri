@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/core/pagina_base.dart';
 import 'package:frontend/core/routes/app_router.dart';
 import 'package:frontend/services/shared_preferences_service.dart';
 import 'package:intl/date_symbol_data_local.dart';

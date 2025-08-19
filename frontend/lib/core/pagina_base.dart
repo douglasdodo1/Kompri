@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/presentation/auth/pages/login_page.dart';
 import 'package:frontend/presentation/compras/pages/compra_page.dart';
 import 'package:frontend/presentation/compras/pages/compras_historico_page.dart';
 import 'package:frontend/presentation/produtos/pages/lista_produtos_page.dart';
@@ -42,12 +43,6 @@ class _PaginaBaseState extends State<PaginaBase> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: selectedIndex, children: pages),
-      bottomNavigationBar: AppFooter(
-        onItemTapped: onItemTapped,
-        selectedIndex: selectedIndex,
-      ),
-    );
+    return LoginPage();
   }
 }
