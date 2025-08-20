@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/core/routes/app_router.dart';
+import 'package:frontend/presentation/auth/bloc/auth_bloc.dart';
+import 'package:frontend/presentation/usuarios/bloc/usuarios_bloc.dart';
 import 'package:frontend/services/shared_preferences_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:frontend/services/injection_container.dart' as di;
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
+            BlocProvider<AuthBloc>(create: (_) => di.sl<AuthBloc>()),
+            BlocProvider<UsuariosBloc>(create: (_) => di.sl<UsuariosBloc>()),
             BlocProvider<ComprasBloc>(create: (_) => di.sl<ComprasBloc>()),
             BlocProvider<ProdutosBloc>(create: (_) => di.sl<ProdutosBloc>()),
           ],

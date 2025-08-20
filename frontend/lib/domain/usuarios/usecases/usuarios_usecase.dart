@@ -3,7 +3,7 @@ import 'package:frontend/domain/usuarios/repositorys/usuarios_repository.dart';
 
 class UsuariosUseCase {
   final UsuariosRepository repository;
-  UsuariosUseCase({required this.repository});
+  UsuariosUseCase(this.repository);
 
   Future<void> criarUsuario(UsuarioEntity usuario, String confirmarSenha) =>
       repository.criarUsuario(usuario, confirmarSenha);
