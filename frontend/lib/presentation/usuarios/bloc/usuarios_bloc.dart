@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/domain/usuarios/entities/usuarios_entity.dart';
 import 'package:frontend/domain/usuarios/usecases/usuarios_usecase.dart';
 import 'package:frontend/presentation/usuarios/bloc/usuarios_event.dart';
 import 'package:frontend/presentation/usuarios/bloc/usuarios_state.dart';
@@ -8,17 +9,91 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
 
   UsuariosBloc(this._usuariosUseCase) : super(UsuariosState.initial()) {
     on<CriarUsuario>(_criarUsuario);
-    on<Logar>(_logar);
+    on<AtualizarCpf>(_atualizarCpf);
+    on<AtualizarNome>(_atualizarNome);
+    on<AtualizarEmail>(_atualizarEmail);
+    on<AtualizarSenha>(_atualizarSenha);
+    on<AtualizarConfirmarSenha>(_atualizarConfirmarSenha);
   }
 
   Future<void> _criarUsuario(
     CriarUsuario event,
     Emitter<UsuariosState> emit,
   ) async {
-    await _usuariosUseCase.criarUsuario(event.usuario, event.confirmarSenha);
+    final UsuarioEntity usuario = UsuarioEntity(
+      cpf: state.cpf,
+      email: state.email,
+      senha: state.senha,
+      nome: state.nome,
+    );
+    await _usuariosUseCase.criarUsuario(usuario);
   }
 
-  Future<void> _logar(Logar event, Emitter<UsuariosState> emit) async {
-    await _usuariosUseCase.logar(event.email, event.senha);
+  Future<void> _atualizarCpf(
+    AtualizarCpf event,
+    Emitter<UsuariosState> emit,
+  ) async {
+    final resultado = _usuariosUseCase.atualizarCpf(event.cpf);
+
+    resultado.fold(
+      (erro) => emit(state.copyWith(errorCpf: erro)),
+      (cpf) => emit(state.copyWith(cpf: cpf.value, errorCpf: '')),
+    );
+  }
+
+  Future<void> _atualizarNome(
+    AtualizarNome event,
+    Emitter<UsuariosState> emit,
+  ) async {
+    final resultado = _usuariosUseCase.atualizarNome(event.nome);
+
+    resultado.fold(
+      (erro) => emit(state.copyWith(errorNome: erro)),
+      (nome) => emit(state.copyWith(nome: nome.value, errorNome: '')),
+    );
+  }
+
+  Future<void> _atualizarEmail(
+    AtualizarEmail event,
+    Emitter<UsuariosState> emit,
+  ) async {
+    final resultado = _usuariosUseCase.atualizarEmail(event.email);
+
+    resultado.fold(
+      (erro) => emit(state.copyWith(errorEmail: erro)),
+      (email) => emit(state.copyWith(email: email.value, errorEmail: '')),
+    );
+  }
+
+  Future<void> _atualizarSenha(
+    AtualizarSenha event,
+    Emitter<UsuariosState> emit,
+  ) async {
+    final resultado = _usuariosUseCase.atualizarSenha(event.senha);
+
+    resultado.fold(
+      (erro) => emit(state.copyWith(errorSenha: erro)),
+      (senha) => emit(state.copyWith(senha: senha.value, errorSenha: '')),
+    );
+  }
+
+  Future<void> _atualizarConfirmarSenha(
+    AtualizarConfirmarSenha event,
+    Emitter<UsuariosState> emit,
+  ) async {
+    final resultado = _usuariosUseCase.atualizarConfirmarSenha(
+      event.confirmarSenha,
+      state.senha,
+    );
+
+    resultado.fold(
+      (erro) => emit(state.copyWith(errorConfirmarSenha: erro)),
+      (confirmarSenha) => emit(
+        state.copyWith(
+          confirmarSenha: confirmarSenha.value,
+          errorConfirmarSenha: '',
+        ),
+      ),
+    );
   }
 }

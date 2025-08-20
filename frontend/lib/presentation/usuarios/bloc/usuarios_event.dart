@@ -1,12 +1,32 @@
-import 'package:frontend/domain/usuarios/entities/usuarios_entity.dart';
-
 abstract class UsuariosEvent {}
 
 class CriarUsuario extends UsuariosEvent {
-  final UsuarioEntity usuario;
-  final String confirmarSenha;
+  CriarUsuario();
+}
 
-  CriarUsuario({required this.usuario, required this.confirmarSenha});
+class AtualizarCpf extends UsuariosEvent {
+  final String cpf;
+  AtualizarCpf({required this.cpf});
+}
+
+class AtualizarNome extends UsuariosEvent {
+  final String nome;
+  AtualizarNome({required this.nome});
+}
+
+class AtualizarEmail extends UsuariosEvent {
+  final String email;
+  AtualizarEmail({required this.email});
+}
+
+class AtualizarSenha extends UsuariosEvent {
+  final String senha;
+  AtualizarSenha({required this.senha});
+}
+
+class AtualizarConfirmarSenha extends UsuariosEvent {
+  final String confirmarSenha;
+  AtualizarConfirmarSenha({required this.confirmarSenha});
 }
 
 class Logar extends UsuariosEvent {

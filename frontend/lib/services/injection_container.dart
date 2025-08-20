@@ -28,8 +28,6 @@ Future<void> init() async {
 
   sl.registerLazySingleton<UsuariosRepository>(() => UsuariosRepositoryImpl());
   sl.registerLazySingleton(() => UsuariosUseCase(sl<UsuariosRepository>()));
-  sl.registerLazySingleton(() => CompraUsecase(sl<ComprasRepository>()));
-
   sl.registerFactory(() => UsuariosBloc(sl<UsuariosUseCase>()));
 
   sl.registerLazySingleton<ComprasRepository>(() => ComprasRepositoryImpl());

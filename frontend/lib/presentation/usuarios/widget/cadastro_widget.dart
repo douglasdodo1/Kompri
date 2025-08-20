@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/presentation/auth/bloc/auth_bloc.dart';
-import 'package:frontend/presentation/auth/bloc/auth_state.dart';
+import 'package:frontend/domain/usuarios/entities/usuarios_entity.dart';
 import 'package:frontend/presentation/usuarios/bloc/usuarios_bloc.dart';
+import 'package:frontend/presentation/usuarios/bloc/usuarios_event.dart';
 import 'package:frontend/presentation/usuarios/bloc/usuarios_state.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,163 +15,202 @@ class CadastroWidget extends StatefulWidget {
 }
 
 class _CadastroWidgetState extends State<CadastroWidget> {
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _cpfController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _senhaController = TextEditingController();
-  final TextEditingController _confirmarSenhaController =
-      TextEditingController();
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _cpfController.dispose();
-    _emailController.dispose();
-    _senhaController.dispose();
-    _confirmarSenhaController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UsuariosBloc, UsuariosState>(
       builder: (context, state) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Criar conta",
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Crie sua conta para começar o Kompri",
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20.h),
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 50.h),
-                child: Form(
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              physics: const NeverScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 22.h,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextFormField(
-                        controller: _nomeController,
-                        decoration: const InputDecoration(
-                          labelText: "nome",
-                          hintText: "nome",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(14)),
-                          ),
-                          isDense: true,
-                          prefixIcon: Icon(Icons.person),
+                      Text(
+                        "Criar conta",
+                        style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
                         ),
-                        keyboardType: TextInputType.emailAddress,
                       ),
-
-                      TextFormField(
-                        controller: _cpfController,
-                        decoration: const InputDecoration(
-                          labelText: "cpf",
-                          hintText: "somente digitos",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(14)),
-                          ),
-                          isDense: true,
-                          prefixIcon: Icon(Icons.pin),
+                      Text(
+                        "Crie sua conta para começar o Kompri",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 20.h),
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: "email",
-                          hintText: "example@ex.com",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(14)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                            vertical: 50.h,
                           ),
-                          isDense: true,
-                          prefixIcon: Icon(Icons.email),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-
-                      TextFormField(
-                        controller: _senhaController,
-                        decoration: const InputDecoration(
-                          labelText: "Senha",
-                          hintText: "Digite sua senha",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(14)),
-                          ),
-                          isDense: true,
-                          prefixIcon: Icon(Icons.lock),
-                        ),
-                        obscureText: true,
-                      ),
-
-                      TextFormField(
-                        controller: _confirmarSenhaController,
-                        decoration: const InputDecoration(
-                          labelText: "confirmar senha",
-                          hintText: "digite sua senha novamente",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(14)),
-                          ),
-                          isDense: true,
-                          prefixIcon: Icon(Icons.lock),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => {},
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                          child: Form(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 22.h,
+                              children: [
+                                TextFormField(
+                                  onChanged: (value) => context
+                                      .read<UsuariosBloc>()
+                                      .add(AtualizarNome(nome: value)),
+                                  decoration: InputDecoration(
+                                    labelText: "Nome",
+                                    hintText: "Digite seu nome",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(14),
+                                      ),
+                                    ),
+                                    isDense: true,
+                                    prefixIcon: Icon(Icons.person),
+                                    errorText: (state.errorNome != '')
+                                        ? state.errorNome
+                                        : null,
+                                  ),
+                                ),
+                                TextFormField(
+                                  onChanged: (value) => context
+                                      .read<UsuariosBloc>()
+                                      .add(AtualizarCpf(cpf: value)),
+                                  decoration: InputDecoration(
+                                    labelText: "CPF",
+                                    hintText: "Somente dígitos",
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(14),
+                                      ),
+                                    ),
+                                    isDense: true,
+                                    prefixIcon: const Icon(Icons.pin),
+                                    errorText: (state.errorCpf != '')
+                                        ? state.errorCpf
+                                        : null,
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                ),
+                                TextFormField(
+                                  onChanged: (value) => context
+                                      .read<UsuariosBloc>()
+                                      .add(AtualizarEmail(email: value)),
+                                  decoration: InputDecoration(
+                                    labelText: "Email",
+                                    hintText: "example@ex.com",
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(14),
+                                      ),
+                                    ),
+                                    isDense: true,
+                                    prefixIcon: const Icon(Icons.email),
+                                    errorText: (state.errorEmail != '')
+                                        ? state.errorEmail
+                                        : null,
+                                  ),
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                TextFormField(
+                                  onChanged: (value) => context
+                                      .read<UsuariosBloc>()
+                                      .add(AtualizarSenha(senha: value)),
+                                  decoration: InputDecoration(
+                                    labelText: "Senha",
+                                    hintText: "Digite sua senha",
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(14),
+                                      ),
+                                    ),
+                                    isDense: true,
+                                    prefixIcon: const Icon(Icons.lock),
+                                    errorText: (state.errorSenha != '')
+                                        ? state.errorSenha
+                                        : null,
+                                  ),
+                                  obscureText: true,
+                                ),
+                                TextFormField(
+                                  onChanged: (value) =>
+                                      context.read<UsuariosBloc>().add(
+                                        AtualizarConfirmarSenha(
+                                          confirmarSenha: value,
+                                        ),
+                                      ),
+                                  decoration: InputDecoration(
+                                    labelText: "Confirmar senha",
+                                    hintText: "Digite sua senha novamente",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(14),
+                                      ),
+                                    ),
+                                    isDense: true,
+                                    prefixIcon: Icon(Icons.lock),
+                                    errorText: (state.errorConfirmarSenha != '')
+                                        ? state.errorConfirmarSenha
+                                        : null,
+                                  ),
+                                  obscureText: true,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      context.read<UsuariosBloc>().add(
+                                        CriarUsuario(),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      backgroundColor: Colors.black,
+                                    ),
+                                    child: const Text(
+                                      "Criar conta",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text("Já possui uma conta? "),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context.goNamed("login");
+                                      },
+                                      child: const Text(
+                                        "Fazer login",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            backgroundColor: Colors.black,
-                          ),
-                          child: const Text(
-                            "Entrar",
-                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ),
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Não tem uma conta? "),
-                          GestureDetector(
-                            onTap: () {
-                              context.goNamed("login");
-                            },
-                            child: const Text(
-                              "Criar conta",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-          ],
+            );
+          },
         );
       },
     );
