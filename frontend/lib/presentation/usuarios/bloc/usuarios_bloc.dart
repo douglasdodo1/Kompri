@@ -22,9 +22,10 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
   ) async {
     final UsuarioEntity usuario = UsuarioEntity(
       cpf: state.cpf,
+      nome: state.nome,
       email: state.email,
       senha: state.senha,
-      nome: state.nome,
+      confirmarSenha: state.confirmarSenha,
     );
     await _usuariosUseCase.criarUsuario(usuario);
   }
@@ -34,9 +35,8 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
     Emitter<UsuariosState> emit,
   ) async {
     final resultado = _usuariosUseCase.atualizarCpf(event.cpf);
-
     resultado.fold(
-      (erro) => emit(state.copyWith(errorCpf: erro)),
+      (erro) => emit(state.copyWith(cpf: event.cpf, errorCpf: erro)),
       (cpf) => emit(state.copyWith(cpf: cpf.value, errorCpf: '')),
     );
   }
@@ -48,7 +48,7 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
     final resultado = _usuariosUseCase.atualizarNome(event.nome);
 
     resultado.fold(
-      (erro) => emit(state.copyWith(errorNome: erro)),
+      (erro) => emit(state.copyWith(nome: event.nome, errorNome: erro)),
       (nome) => emit(state.copyWith(nome: nome.value, errorNome: '')),
     );
   }
@@ -60,7 +60,7 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
     final resultado = _usuariosUseCase.atualizarEmail(event.email);
 
     resultado.fold(
-      (erro) => emit(state.copyWith(errorEmail: erro)),
+      (erro) => emit(state.copyWith(email: event.email, errorEmail: erro)),
       (email) => emit(state.copyWith(email: email.value, errorEmail: '')),
     );
   }
@@ -72,7 +72,7 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
     final resultado = _usuariosUseCase.atualizarSenha(event.senha);
 
     resultado.fold(
-      (erro) => emit(state.copyWith(errorSenha: erro)),
+      (erro) => emit(state.copyWith(senha: event.senha, errorSenha: erro)),
       (senha) => emit(state.copyWith(senha: senha.value, errorSenha: '')),
     );
   }
@@ -87,7 +87,12 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
     );
 
     resultado.fold(
-      (erro) => emit(state.copyWith(errorConfirmarSenha: erro)),
+      (erro) => emit(
+        state.copyWith(
+          confirmarSenha: event.confirmarSenha,
+          errorConfirmarSenha: erro,
+        ),
+      ),
       (confirmarSenha) => emit(
         state.copyWith(
           confirmarSenha: confirmarSenha.value,

@@ -5,12 +5,14 @@ class UsuarioEntity {
   final String nome;
   final String email;
   final String senha;
+  final String confirmarSenha;
 
   const UsuarioEntity({
     required this.cpf,
+    required this.nome,
     required this.email,
     required this.senha,
-    required this.nome,
+    required this.confirmarSenha,
   });
 
   UsuarioModel toModel() =>
@@ -21,12 +23,14 @@ class UsuarioEntity {
     String? nome,
     String? email,
     String? senha,
+    String? confirmarSenha,
   }) {
     return UsuarioEntity(
       cpf: cpf ?? this.cpf,
+      nome: nome ?? this.nome,
       email: email ?? this.email,
       senha: senha ?? this.senha,
-      nome: nome ?? this.nome,
+      confirmarSenha: confirmarSenha ?? this.confirmarSenha,
     );
   }
 }

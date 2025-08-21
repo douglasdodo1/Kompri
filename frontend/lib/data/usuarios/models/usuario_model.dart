@@ -22,8 +22,13 @@ class UsuarioModel {
     );
   }
 
-  UsuarioEntity toEntity() =>
-      UsuarioEntity(cpf: cpf, nome: nome, email: email, senha: senha);
+  UsuarioEntity toEntity() => UsuarioEntity(
+    cpf: cpf,
+    nome: nome,
+    email: email,
+    senha: senha,
+    confirmarSenha: '',
+  );
 
   Map<String, dynamic> toJson() => {
     'cpf': cpf,

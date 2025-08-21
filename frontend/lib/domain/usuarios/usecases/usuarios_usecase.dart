@@ -11,10 +11,26 @@ class UsuariosUseCase {
   final UsuariosRepository repository;
   UsuariosUseCase(this.repository);
 
-  Future<void> criarUsuario(UsuarioEntity usuario) =>
-      repository.criarUsuario(usuario);
+  Future<void> criarUsuario(UsuarioEntity usuario) {
+    print(
+      '${usuario.cpf} ${usuario.email} ${usuario.senha}, ${usuario.confirmarSenha}',
+    );
+    if (Cpf.create(usuario.cpf).isRight() &&
+        Nome.create(usuario.nome).isRight() &&
+        Email.create(usuario.email).isRight() &&
+        Senha.create(usuario.senha).isRight() &&
+        ConfirmarSenha.create(
+          usuario.confirmarSenha,
+          usuario.senha,
+        ).isRight()) {
+      return repository.criarUsuario(usuario);
+    }
+
+    return Future.value();
+  }
 
   Either<String, Cpf> atualizarCpf(String cpf) {
+    print(Cpf.create(cpf));
     return Cpf.create(cpf);
   }
 
