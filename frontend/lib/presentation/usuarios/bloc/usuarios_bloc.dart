@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/domain/usuarios/entities/usuarios_entity.dart';
 import 'package:frontend/domain/usuarios/usecases/usuarios_usecase.dart';
@@ -9,7 +10,6 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
 
   UsuariosBloc(this._usuariosUseCase) : super(UsuariosState.initial()) {
     on<CriarUsuario>(_criarUsuario);
-    on<AtualizarCpf>(_atualizarCpf);
     on<AtualizarNome>(_atualizarNome);
     on<AtualizarEmail>(_atualizarEmail);
     on<AtualizarSenha>(_atualizarSenha);
@@ -20,25 +20,23 @@ class UsuariosBloc extends Bloc<UsuariosEvent, UsuariosState> {
     CriarUsuario event,
     Emitter<UsuariosState> emit,
   ) async {
-    final UsuarioEntity usuario = UsuarioEntity(
-      cpf: state.cpf,
-      nome: state.nome,
-      email: state.email,
-      senha: state.senha,
-      confirmarSenha: state.confirmarSenha,
-    );
-    await _usuariosUseCase.criarUsuario(usuario);
-  }
+    if (state.state != Status.carregando) {
+      emit(state.copyWith(state: Status.carregando));
+      await Future.delayed(const Duration(seconds: 2));
 
-  Future<void> _atualizarCpf(
-    AtualizarCpf event,
-    Emitter<UsuariosState> emit,
-  ) async {
-    final resultado = _usuariosUseCase.atualizarCpf(event.cpf);
-    resultado.fold(
-      (erro) => emit(state.copyWith(cpf: event.cpf, errorCpf: erro)),
-      (cpf) => emit(state.copyWith(cpf: cpf.value, errorCpf: '')),
-    );
+      final UsuarioEntity usuario = UsuarioEntity(
+        nome: state.nome,
+        email: state.email,
+        senha: state.senha,
+        confirmarSenha: state.confirmarSenha,
+      );
+      final bool result = await _usuariosUseCase.criarUsuario(usuario);
+      if (result) {
+        emit(state.copyWith(state: Status.sucesso));
+      } else {
+        emit(state.copyWith(state: Status.erro));
+      }
+    }
   }
 
   Future<void> _atualizarNome(

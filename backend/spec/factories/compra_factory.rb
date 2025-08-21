@@ -1,14 +1,15 @@
 FactoryBot.define do
   factory :compra do
-    association(:usuario)
-    association(:instituicao)
+    association :usuario
+    association :instituicao
     status { "pendente" }
     valor_total { 100.00 }
     valor_estimado { 80.00 }
     qtd_itens { 2 }
 
-    trait :usuario_cpf_vazio do
-      usuario_cpf { '' }
+
+    trait :usuario_id_vazio do
+      usuario_id { nil }
     end
 
     trait :status_vazio do

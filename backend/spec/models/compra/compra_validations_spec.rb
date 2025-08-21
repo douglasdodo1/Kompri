@@ -6,10 +6,6 @@ RSpec.describe Produto, type: :model do
       expect(build(:compra)).to be_valid
     end
 
-    it "é inválido com CPF vazio" do
-      expect(build(:compra, :usuario_cpf_vazio)).not_to be_valid
-    end
-
     it "é inválido com status vazio" do
       expect(build(:compra, :status_vazio)).not_to be_valid
     end

@@ -6,7 +6,7 @@ RSpec.describe "requisições de itens", type: :request do
   end
   let(:usuario) { create(:usuario) }
   let(:instituicao) { create(:instituicao) }
-  let(:compra) { create(:compra, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }
+  let(:compra) { create(:compra, instituicao_id: instituicao.id) }
   let(:produto) { create(:produto) }
 
   describe "POST /itens" do

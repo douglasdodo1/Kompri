@@ -29,9 +29,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<AuthLoginRequested>((event, emit) async {
       emit(state.copyWith(status: AuthStatus.loading));
+      await Future.delayed(const Duration(seconds: 4));
 
-      final user = await useCase.logar(event.cpf, event.senha);
-      
+      try {
+        await useCase.logar(event.cpf, event.senha);
+        emit(state.copyWith(status: AuthStatus.authenticated));
+      } catch (e) {
+        emit(state.copyWith(status: AuthStatus.error));
+        return;
+      }
+      emit(state.copyWith(status: AuthStatus.authenticated));
     });
 
     on<AuthLogoutRequested>((event, emit) {

@@ -9,12 +9,6 @@ RSpec.describe Compra, type: :model do
       expect(column.null).to be_falsey
     end
 
-    it "possui a coluna usuario_cpf como string e não nula" do
-      column = columns["usuario_cpf"]
-      expect(column.type).to eq(:string)
-      expect(column.null).to be_falsey
-    end
-
     it "possui a coluna status como string e não nula" do
       column = columns["status"]
       expect(column.type).to eq(:string)

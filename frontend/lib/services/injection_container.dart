@@ -18,15 +18,21 @@ import 'package:frontend/presentation/produtos/bloc/produtos_bloc.dart';
 import 'package:frontend/presentation/usuarios/bloc/usuarios_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:frontend/domain/compras/repositories/compras_repository.dart';
+import 'package:http/http.dart' as http;
 
 final sl = GetIt.instance;
+final client = http.Client();
 
 Future<void> init() async {
-  sl.registerLazySingleton<AuthRepository>(() => sl<AuthRepositoryImpl>());
-  sl.registerLazySingleton<AuthUsecase>(() => sl<AuthUsecase>());
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(client: client),
+  );
+  sl.registerLazySingleton(() => AuthUsecase(sl<AuthRepository>()));
   sl.registerFactory(() => AuthBloc(sl<AuthUsecase>()));
 
-  sl.registerLazySingleton<UsuariosRepository>(() => UsuariosRepositoryImpl());
+  sl.registerLazySingleton<UsuariosRepository>(
+    () => UsuariosRepositoryImpl(client: client),
+  );
   sl.registerLazySingleton(() => UsuariosUseCase(sl<UsuariosRepository>()));
   sl.registerFactory(() => UsuariosBloc(sl<UsuariosUseCase>()));
 

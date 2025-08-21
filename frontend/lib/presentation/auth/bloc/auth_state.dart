@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum AuthStatus { initial, authenticated, unauthenticated, loading }
+enum AuthStatus { initial, authenticated, unauthenticated, loading, error }
 
 class AuthUser {
   final String? cpf;

@@ -18,7 +18,7 @@ class UsuariosController < ApplicationController
 
 
   def update
-    @usuario = Usuario.find_by!(cpf: params[:cpf])
+    @usuario = Usuario.find_by!(email: params[:email])
     @usuario.update!(usuario_params)
     keys_enviadas = usuario_params.keys.map(&:to_s)
     chaves_alteradas = @usuario.previous_changes.keys
@@ -36,10 +36,10 @@ class UsuariosController < ApplicationController
 
   private
   def set_usuario
-    @usuario = Usuario.find_by!(cpf: params.expect(:cpf))
+    @usuario = Usuario.find_by!(email: params[:email])
   end
 
   def usuario_params
-    params.expect(usuario: [ :cpf, :nome, :email, :password, :telefone ])
+    params.expect(usuario: [ :email, :nome, :password])
   end
 end

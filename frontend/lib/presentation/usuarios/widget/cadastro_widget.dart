@@ -55,7 +55,7 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                           child: Form(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              spacing: 22.h,
+                              spacing: 17.h,
                               children: [
                                 TextFormField(
                                   onChanged: (value) => context
@@ -76,26 +76,7 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                                         : null,
                                   ),
                                 ),
-                                TextFormField(
-                                  onChanged: (value) => context
-                                      .read<UsuariosBloc>()
-                                      .add(AtualizarCpf(cpf: value)),
-                                  decoration: InputDecoration(
-                                    labelText: "CPF",
-                                    hintText: "Somente dígitos",
-                                    border: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(14),
-                                      ),
-                                    ),
-                                    isDense: true,
-                                    prefixIcon: const Icon(Icons.pin),
-                                    errorText: (state.errorCpf != '')
-                                        ? state.errorCpf
-                                        : null,
-                                  ),
-                                  keyboardType: TextInputType.number,
-                                ),
+
                                 TextFormField(
                                   onChanged: (value) => context
                                       .read<UsuariosBloc>()
@@ -159,6 +140,24 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                                   ),
                                   obscureText: true,
                                 ),
+
+                                Container(
+                                  child: state.state == Status.sucesso
+                                      ? Text(
+                                          "Conta criada com sucesso!",
+                                          style: TextStyle(color: Colors.green),
+                                        )
+                                      : null,
+                                ),
+                                Container(
+                                  child: state.state == Status.erro
+                                      ? Text(
+                                          "Erro ao criar conta",
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      : null,
+                                ),
+
                                 SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
@@ -173,13 +172,22 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                                       ),
                                       backgroundColor: Colors.black,
                                     ),
-                                    child: const Text(
-                                      "Criar conta",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                    child: state.state == Status.carregando
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
+                                        : const Text(
+                                            "Criar conta",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                   ),
                                 ),
                                 Row(

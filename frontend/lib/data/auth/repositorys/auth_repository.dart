@@ -9,7 +9,6 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<void> logar(String cpf, String senha) async {
-    print("enviando requisição");
     final url = Uri.parse('http://localhost:3000/login');
 
     final response = await client.post(

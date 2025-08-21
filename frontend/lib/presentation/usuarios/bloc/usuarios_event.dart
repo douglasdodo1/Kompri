@@ -4,11 +4,6 @@ class CriarUsuario extends UsuariosEvent {
   CriarUsuario();
 }
 
-class AtualizarCpf extends UsuariosEvent {
-  final String cpf;
-  AtualizarCpf({required this.cpf});
-}
-
 class AtualizarNome extends UsuariosEvent {
   final String nome;
   AtualizarNome({required this.nome});

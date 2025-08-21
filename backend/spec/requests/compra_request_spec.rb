@@ -7,34 +7,34 @@ RSpec.describe Compra, type: :request do
       .and_return(true)
   end
 
-  let!(:usuario) { create(:usuario, cpf: "12345678909") }
+  let!(:usuario) { create(:usuario) }
   let!(:instituicao) { create(:instituicao) }
 
    describe "POST /compras" do
     it "cria uma nova compra com dados válidos" do
       post "/compras",
-      params: { compra: attributes_for(:compra, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }.to_json,
+      params: { compra: attributes_for(:compra, usuario_id: usuario.id, instituicao_id: instituicao.id) }.to_json,
       headers: { "CONTENT_TYPE" => "application/json" }
 
       expect(response).to have_http_status(:created)
     end
 
     context "dados inválidos" do
-      it "não cria uma compra com CPF vazio" do
+      it "não cria uma compra com ID vazio" do
 
-        post "/compras", params: { compra: attributes_for(:compra, :usuario_cpf_vazio, instituicao_id: instituicao.id) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :usuario_id_vazio, instituicao_id: instituicao.id) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
         expect(json).to include(
           "erro" => "Compra inválido",
-          "mensagens" => ["Usuario deve estar associada", "Usuário cpf não pode ficar em branco"],
+          "mensagens" => ["Usuario deve estar associada"],
           "modelo" => "Compra",
           "tipo" => "ActiveRecord::RecordInvalid"
         )
       end
       it "não cria uma compra com status vazio" do
-        post "/compras", params: { compra: attributes_for(:compra, :status_vazio, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :status_vazio, usuario_id: usuario.id, instituicao_id: instituicao.id) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -47,7 +47,7 @@ RSpec.describe Compra, type: :request do
       end
 
       it "não cria uma compra com instituicao_id inválido" do
-        post "/compras", params: { compra: attributes_for(:compra, usuario_cpf: usuario.cpf, instituicao_id: nil) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, usuario_id: usuario.id, instituicao_id: nil) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -60,7 +60,7 @@ RSpec.describe Compra, type: :request do
       end
 
       it "não cria uma compra com status inválido" do
-        post "/compras", params: { compra: attributes_for(:compra, :status_invalido, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :status_invalido, usuario_id: usuario.id, instituicao_id: instituicao.id) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -73,7 +73,7 @@ RSpec.describe Compra, type: :request do
       end
 
       it "não cria uma compra com valor_total vazio" do
-        post "/compras", params: { compra: attributes_for(:compra, :valor_total_vazio, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :valor_total_vazio, usuario_id: usuario.id, instituicao_id: instituicao.id) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -86,7 +86,7 @@ RSpec.describe Compra, type: :request do
       end
 
       it "não cria uma compra com valor_total negativo" do
-        post "/compras", params: { compra: attributes_for(:compra, :valor_total_negativo, usuario_cpf: usuario.cpf), instituicao_id: instituicao.id }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :valor_total_negativo, usuario_id: usuario.id), instituicao_id: instituicao.id }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -99,7 +99,7 @@ RSpec.describe Compra, type: :request do
       end
 
       it "não cria uma compra com valor_estimado vazio" do
-        post "/compras", params: { compra: attributes_for(:compra, :valor_estimado_vazio, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :valor_estimado_vazio, usuario_id: usuario.id, instituicao_id: instituicao.id) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -112,7 +112,7 @@ RSpec.describe Compra, type: :request do
       end
 
       it "não cria uma compra com valor_estimado negativo" do
-        post "/compras", params: { compra: attributes_for(:compra, :valor_estimado_negativo, usuario_cpf: usuario.cpf, instituicao_id: instituicao.id) }.to_json,
+        post "/compras", params: { compra: attributes_for(:compra, :valor_estimado_negativo, usuario_id: usuario.id, instituicao_id: instituicao.id) }.to_json,
         headers: { "CONTENT_TYPE" => "application/json" }
         expect(response).to have_http_status(:unprocessable_entity)
         json = JSON.parse(response.body)
@@ -134,7 +134,7 @@ RSpec.describe Compra, type: :request do
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
       expect(json).to include(
-        "usuario_cpf" => compra.usuario.cpf,
+        "usuario_id" => compra.usuario.id,
         "instituicao_id" => compra.instituicao.id,
         "status" => compra.status,
         "valor_total" => compra.valor_total.to_s,
@@ -158,7 +158,7 @@ RSpec.describe Compra, type: :request do
       json = JSON.parse(response.body)
       expect(json.size).to eq(3)
       expect(json.first).to include(
-        "usuario_cpf" => compras.first.usuario.cpf,
+        "usuario_id" => compras.first.usuario.id,
         "instituicao_id" => compras.first.instituicao.id,
         "status" => compras.first.status,
         "valor_total" => compras.first.valor_total.to_s,

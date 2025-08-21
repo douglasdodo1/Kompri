@@ -4,11 +4,6 @@ RSpec.describe Usuario, type: :model do
   describe "estrutura do banco de dados" do
     let(:columns) { Usuario.columns_hash }
 
-    it "possui a coluna cpf como string e não nula" do
-      column = columns["cpf"]
-      expect(column.type).to eq(:string)
-      expect(column.null).to be_falsey
-    end
 
     it "possui a coluna nome como string e não nula" do
       column = columns["nome"]
@@ -35,11 +30,6 @@ RSpec.describe Usuario, type: :model do
       expect(column.null).to be_falsey
     end
 
-    it "possui a coluna telefone como string e não nula" do
-      column = columns["telefone"]
-      expect(column.type).to eq(:string)
-      expect(column.null).to be_falsey
-    end
 
     it "possui a coluna created_at como datetime e não nula" do
       column = columns["created_at"]

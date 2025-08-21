@@ -6,22 +6,6 @@ RSpec.describe Usuario, type: :model do
       expect(build(:usuario)).to be_valid
     end
 
-    it "é inválido com cpf vazio" do
-      expect(build(:usuario, :cpf_vazio)).not_to be_valid
-    end
-
-    it "é inválido com cpf com caractere não válido" do
-      expect(build(:usuario, :cpf_com_caracter)).not_to be_valid
-    end
-
-    it "é inválido com cpf com tamanho inválido" do
-      expect(build(:usuario, :cpf_tamanho_invalido)).not_to be_valid
-    end
-
-    it "é inválido com cpf com números iguais" do
-      expect(build(:usuario, :cpf_numeros_iguais)).not_to be_valid
-    end
-
     it "é inválido com nome vazio" do
       expect(build(:usuario, :nome_vazio)).not_to be_valid
     end
@@ -46,17 +30,6 @@ RSpec.describe Usuario, type: :model do
       expect(build(:usuario, :email_sem_ponto)).not_to be_valid
     end
     /
-    it "é inválido com telefone vazio" do
-      expect(build(:usuario, :telefone_vazio)).not_to be_valid
-    end
-
-    it "é inválido com telefone com caracter não válido" do
-      expect(build(:usuario, :telefone_com_caracter)).not_to be_valid
-    end
-
-    it "é inválido com telefone com tamanho inválido" do
-      expect(build(:usuario, :telefone_tamanho_invalido)).not_to be_valid
-    end
 
     it "é inválido com senha vazia" do
       expect(build(:usuario, :password_vazio)).not_to be_valid

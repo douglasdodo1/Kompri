@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :compras
   resources :instituicoes
   resources :produtos
-  resources :usuarios, param: :cpf
+  resources :usuarios, param: :email, constraints: { email: /[^\/]+/ }
   resources :items
   post "/login", to: "auth#login"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

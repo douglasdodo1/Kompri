@@ -1,29 +1,11 @@
-require 'cpf_faker'
 
 FactoryBot.define do
   factory :usuario do
-    cpf { Faker::CPF.numeric }
+    id { Faker::Number.number(digits: 10) }
     nome { Faker::Name.name }
     email { Faker::Internet.email }
-    telefone { Faker::PhoneNumber.cell_phone.gsub(/\D/, '') }
     password { Faker::Internet.password }
 
-    #CPF'S inválidos
-    trait :cpf_vazio do
-      cpf { '' }
-    end
-
-    trait :cpf_com_caracter do
-      cpf { 'AAA00000000' }
-    end
-
-    trait :cpf_tamanho_invalido do
-      cpf { '00000000' }
-    end
-
-    trait :cpf_numeros_iguais do
-      cpf { '00000000000' }
-    end
 
     #nomes inválidos
     trait :nome_vazio do
@@ -90,6 +72,5 @@ FactoryBot.define do
       password { 'passwordnovo' }
     end
   end
-
  
 end

@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:frontend/data/usuarios/value_objects/confirmar_senha.dart';
-import 'package:frontend/data/usuarios/value_objects/cpf.dart';
 import 'package:frontend/data/usuarios/value_objects/email.dart';
 import 'package:frontend/data/usuarios/value_objects/nome.dart';
 import 'package:frontend/data/usuarios/value_objects/senha.dart';
@@ -11,12 +10,8 @@ class UsuariosUseCase {
   final UsuariosRepository repository;
   UsuariosUseCase(this.repository);
 
-  Future<void> criarUsuario(UsuarioEntity usuario) {
-    print(
-      '${usuario.cpf} ${usuario.email} ${usuario.senha}, ${usuario.confirmarSenha}',
-    );
-    if (Cpf.create(usuario.cpf).isRight() &&
-        Nome.create(usuario.nome).isRight() &&
+  Future<bool> criarUsuario(UsuarioEntity usuario) {
+    if (Nome.create(usuario.nome).isRight() &&
         Email.create(usuario.email).isRight() &&
         Senha.create(usuario.senha).isRight() &&
         ConfirmarSenha.create(
@@ -26,12 +21,7 @@ class UsuariosUseCase {
       return repository.criarUsuario(usuario);
     }
 
-    return Future.value();
-  }
-
-  Either<String, Cpf> atualizarCpf(String cpf) {
-    print(Cpf.create(cpf));
-    return Cpf.create(cpf);
+    return Future.value(false);
   }
 
   Either<String, Nome> atualizarNome(String nome) {
